@@ -5,11 +5,14 @@
  */
 package com.ussd.pay.controler;
 
+import com.ussd.pay.dao.SessionUssdRepository;
+import com.ussd.pay.entities.Sessionussd;
 import com.ussd.pay.pojo.PojoUssd;
 import com.ussd.pay.pojo.Responses;
 import com.ussd.pay.service.UssdService;
 import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.session.SessionRepositoryUnavailableException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,30 +31,40 @@ public class UssdRestController {
     @Autowired
     UssdService ussdservice;
 
+    @Autowired
+    SessionUssdRepository ussdRepository;
 
     @RequestMapping(value = "/ussd", method = RequestMethod.POST)
     public HashMap getUssd(@RequestBody PojoUssd pojoUssd) {
         HashMap map = new HashMap();
+        
         if (pojoUssd.getMessage().equals("237*100")) {
-
+            Sessionussd sessionussd=new Sessionussd();
+            sessionussd.setMessage(pojoUssd.getMessage());
+            sessionussd.setMsisdn(pojoUssd.getMsisdn());
+            sessionussd.setProvider(pojoUssd.getProvider());
+            sessionussd.setSessionid(pojoUssd.getSessionid());
+            sessionussd.setLastsep("1");
+            ussdRepository.save(sessionussd);
+            
             map.put("message", "Bienvenue sur PerfectPay~1.Transfert d'argent~2.Paiement Marchand~3.Operations Bancaires~4.Services Tiers~5.Mon compte~0.Annuler ");
             map.put("command", "1");
             return map;
         }
 
         if (pojoUssd.getMessage().equals("1")) {
-            Responses  response=new Responses();
-            response= ussdservice.CheckphoneNumber(pojoUssd.getMsisdn());
-           if(response.getSucces()==-1){
-              map.put("message", response.getMsg());
-              map.put("command", "1");
-              return map;
-           }
-            if(response.getSucces()==0){
-              map.put("message", response.getMsg());
-              map.put("command", "1");
-              return map;
-           }
+            Responses response = new Responses();
+            response = ussdservice.CheckphoneNumber(pojoUssd.getMsisdn());
+            if (response.getSucces() == -1) {
+                map.put("message", response.getMsg());
+                map.put("command", "1");
+                return map;
+            }
+            if (response.getSucces() == 0) {
+                map.put("message", response.getMsg());
+                map.put("command", "1");
+                return map;
+            }
             map.put("message", "Transfert d'argent~1.Vers un client PerfectPay~2.Vers un client MTN~3.Vers un client Orange~4.Vers un client EU MobileMoney~5.Vers un client YUP~6.Vers un client YUP~0.Retour ");
             map.put("command", "1");
             return map;
@@ -89,11 +102,11 @@ public class UssdRestController {
 
         return map;
     }
-    
-     @RequestMapping(value = "/test", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
     public Responses getUssd() {
-      Responses response=new Responses();
-      response=  ussdservice.CheckphoneNumber("691788864");
-        return response ;
+        Responses response = new Responses();
+        response = ussdservice.CheckphoneNumber("691788864");
+        return response;
     }
 }
