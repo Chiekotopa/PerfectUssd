@@ -9,6 +9,7 @@ import com.ussd.pay.entities.Sessionussd;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  *
@@ -16,4 +17,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface SessionUssdRepository extends JpaRepository<Sessionussd, Integer>{
     
+    
+    
+    @Query(value = "SELECT s FROM Sessionussd s WHERE s.sessionid=?1")
+    public Sessionussd findApiBySessionId(String sessionid);
 }
