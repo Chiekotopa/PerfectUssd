@@ -44,6 +44,13 @@ public class Sessionussd implements Serializable {
     private String message;
     @Column(name = "lastsep")
     private String lastsep;
+    @Column(name = "destinataire")
+    private String destinataire;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "montant")
+    private Double montant;
+    @Column(name = "codesecret")
+    private String codesecret;
 
     public Sessionussd() {
     }
@@ -98,6 +105,30 @@ public class Sessionussd implements Serializable {
 
     public void setLastsep(String lastsep) {
         this.lastsep = lastsep;
+    }
+
+    public String getDestinataire() {
+        return destinataire;
+    }
+
+    public void setDestinataire(String destinataire) {
+        this.destinataire = destinataire;
+    }
+
+    public Double getMontant() {
+        return montant;
+    }
+
+    public void setMontant(Double montant) {
+        this.montant = montant;
+    }
+
+    public String getCodesecret() {
+        return codesecret;
+    }
+
+    public void setCodesecret(String codesecret) {
+        this.codesecret = codesecret;
     }
 
     @Override
