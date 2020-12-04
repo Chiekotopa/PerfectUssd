@@ -17,8 +17,7 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface SessionUssdRepository extends JpaRepository<Sessionussd, Integer>{
     
-    
-    
+
     @Query(value = "SELECT s FROM Sessionussd s WHERE s.sessionid=?1")
     public Sessionussd findApiBySessionId(String sessionid);
 }

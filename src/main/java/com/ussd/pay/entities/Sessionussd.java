@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Carlos TCHIOZEM
+ * @author Administrateur
  */
 @Entity
 @Table(name = "sessionussd")
@@ -51,6 +51,28 @@ public class Sessionussd implements Serializable {
     private Double montant;
     @Column(name = "codesecret")
     private String codesecret;
+    @Column(name = "newcode")
+    private String newcode;
+    @Column(name = "codemarchant")
+    private String codemarchant;
+    @Column(name = "access")
+    private Integer access;
+    @Column(name = "nom")
+    private String nom;
+    @Column(name = "prenom")
+    private String prenom;
+    @Column(name = "Cni")
+    private String cni;
+    @Column(name = "Sexe")
+    private String sexe;
+    @Column(name = "datenaissance")
+    private String datenaissance;
+    @Column(name = "lieunaissance")
+    private String lieunaissance;
+    @Column(name = "numbcontribuable")
+    private String numbcontribuable;
+    @Column(name = "email")
+    private String email;
 
     public Sessionussd() {
     }
@@ -129,6 +151,94 @@ public class Sessionussd implements Serializable {
 
     public void setCodesecret(String codesecret) {
         this.codesecret = codesecret;
+    }
+
+    public String getNewcode() {
+        return newcode;
+    }
+
+    public void setNewcode(String newcode) {
+        this.newcode = newcode;
+    }
+
+    public String getCodemarchant() {
+        return codemarchant;
+    }
+
+    public void setCodemarchant(String codemarchant) {
+        this.codemarchant = codemarchant;
+    }
+
+    public Integer getAccess() {
+        return access;
+    }
+
+    public void setAccess(Integer access) {
+        this.access = access;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public String getCni() {
+        return cni;
+    }
+
+    public void setCni(String cni) {
+        this.cni = cni;
+    }
+
+    public String getSexe() {
+        return sexe;
+    }
+
+    public void setSexe(String sexe) {
+        this.sexe = sexe;
+    }
+
+    public String getDatenaissance() {
+        return datenaissance;
+    }
+
+    public void setDatenaissance(String datenaissance) {
+        this.datenaissance = datenaissance;
+    }
+
+    public String getLieunaissance() {
+        return lieunaissance;
+    }
+
+    public void setLieunaissance(String lieunaissance) {
+        this.lieunaissance = lieunaissance;
+    }
+
+    public String getNumbcontribuable() {
+        return numbcontribuable;
+    }
+
+    public void setNumbcontribuable(String numbcontribuable) {
+        this.numbcontribuable = numbcontribuable;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
