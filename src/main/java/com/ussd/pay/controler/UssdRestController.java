@@ -261,13 +261,14 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
-            sessionussd.setAccess(null);
+           
+            response = new Responses();
+            response = ussdservice.CreateAccountUssd(sessionussd);
+             sessionussd.setAccess(null);
             sessionussd.setNewcode(null);
             sessionussd.setCodesecret(null);
             sessionussd.setNewcode(pojoUssd.getMessage());
             ussdRepository.save(sessionussd);
-            response = new Responses();
-            response = ussdservice.CreateAccountUssd(sessionussd);
             map.put("message", response.getMsg()+"~0.Retour ");
             map.put("command", "1");
             return map;
@@ -316,7 +317,7 @@ public class UssdRestController {
             return map;
         }
 
-        if (sessionussd.getLastsep().equals("237*100*1*1") && !"0".equals(pojoUssd.getMessage()) && sessionussd.getDestinataire() != null && sessionussd.getMontant() != null && sessionussd.getCodesecret() == null) {
+        if (sessionussd.getLastsep().equals("237*100*1*1") && !"0".equals(pojoUssd.getMessage()) && sessionussd.getDestinataire() != null && sessionussd.getMontant() != null) {
             Responses response = new Responses();
             response = ussdservice.validationTransfert(sessionussd.getMontant().toString(), pojoUssd.getMsisdn(), sessionussd.getDestinataire(), pojoUssd.getMessage());
             if (response.getSucces() == -6) {
@@ -332,9 +333,41 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
+              if (response.getSucces() == -10) {
+               
+                map.put("message", response.getMsg());
+                map.put("command", "1");
+                return map;
+            }
+               if (response.getSucces() == -2) {
+               
+                map.put("message", response.getMsg());
+                map.put("command", "1");
+                return map;
+            }
+                if (response.getSucces() == -3) {
+               
+                map.put("message", response.getMsg());
+                map.put("command", "1");
+                return map;
+            }
+                 if (response.getSucces() == -5) {
+               
+                map.put("message", response.getMsg());
+                map.put("command", "1");
+                return map;
+            }
+                 
+            System.out.println(sessionussd.getMontant());
+                map.put("message", "probleme de function");
+                map.put("command", "1");
+                return map;
+            
         }
+        
 
-        if (sessionussd.getLastsep().equals("237*100*1*1") && !"0".equals(pojoUssd.getMessage()) && sessionussd.getDestinataire() != null) {
+        if (sessionussd.getLastsep().equals("237*100*1*1") && !"0".equals(pojoUssd.getMessage()) && sessionussd.getDestinataire() != null && sessionussd.getMontant()==null) {
+            
             Responses response = new Responses();
             response = ussdservice.CheckSoldeTransfert(pojoUssd.getMessage(), pojoUssd.getMsisdn(), sessionussd.getDestinataire());
             if (response.getSucces() == -1) {
@@ -361,7 +394,8 @@ public class UssdRestController {
                 return map;
             }
         }
-
+        
+            //retour 
         if (sessionussd.getLastsep().equals("237*100*1*1") && pojoUssd.getMessage().equals("0") && sessionussd.getDestinataire() != null && sessionussd.getMontant() == null) {
             sessionussd.setDestinataire(null);
             ussdRepository.save(sessionussd);
@@ -379,9 +413,10 @@ public class UssdRestController {
             return map;
 
         }
-
-        if (sessionussd.getLastsep().equals("237*100*1*1") && !"0".equals(pojoUssd.getMessage())) {
+         //entrer le montant pour le paiement
+        if (sessionussd.getLastsep().equals("237*100*1*1") && !"0".equals(pojoUssd.getMessage())&& sessionussd.getMontant()==null) {
             Responses response = new Responses();
+            System.out.println("destinataire");
             response = ussdservice.CheckCompteDestinaire(pojoUssd.getMsisdn(), pojoUssd.getMessage());
             if (response.getSucces() == -1) {
                 map.put("message", response.getMsg() + "~0.Retour ");
