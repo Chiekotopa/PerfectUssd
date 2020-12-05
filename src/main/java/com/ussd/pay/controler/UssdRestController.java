@@ -60,16 +60,19 @@ public class UssdRestController {
         
         //Creation de compte ***************************************************************************************************************************************        
       
-        if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null) {
+        if (pojoUssd.getMessage().equals("1") && sessionussd.getAccess().equals("0")) {
             
+            sessionussd.setAccess("nom");
+            ussdRepository.save(sessionussd);
             map.put("message", "Entrez le nom~0.Annuler ");
             map.put("command", "1");
             return map;
         }
        //Save nom 
-         if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null && sessionussd.getNom()==null) {
+         if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("nom")) {
            
             sessionussd.setNom(pojoUssd.getMessage());
+            sessionussd.setAccess("prenom");
             ussdRepository.save(sessionussd);
             map.put("message", "Entrez le prenom~0.Annuler ");
             map.put("command", "1");
@@ -77,9 +80,10 @@ public class UssdRestController {
         }
          
          //Save prenom
-         if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null && sessionussd.getNom()!=null) {
+         if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("prenom") ) {
            
             sessionussd.setPrenom(pojoUssd.getMessage());
+             sessionussd.setAccess("CNI");
             ussdRepository.save(sessionussd);
             map.put("message", "Entrez le Numero de CNI~0.Annuler ");
             map.put("command", "1");
@@ -87,7 +91,7 @@ public class UssdRestController {
         }
          
          //Save CNI
-          if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null && sessionussd.getPrenom()!=null) {
+          if (!"0".equals(pojoUssd.getMessage()) &&  sessionussd.getAccess().equals("CNI")) {
            
             Responses response = new Responses();
             response = ussdservice.CheckCni(pojoUssd.getMessage());
@@ -103,6 +107,7 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
+            sessionussd.setAccess("Sexe");
             sessionussd.setCni(pojoUssd.getMessage());
             ussdRepository.save(sessionussd);
             map.put("message", "Choisir le Sexe~1.MAsculin~2.Feminin~0.Annuler ");
@@ -111,7 +116,7 @@ public class UssdRestController {
         }
           
            //Save Sexe
-          if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null && sessionussd.getCni()!=null) {
+          if (!"0".equals(pojoUssd.getMessage()) &&  sessionussd.getAccess().equals("Sexe")) {
            
             Responses response = new Responses();
             response = ussdservice.CheckSexe(pojoUssd.getMessage());
@@ -127,6 +132,7 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
+            sessionussd.setAccess("Naissance");
             sessionussd.setSexe(pojoUssd.getMessage());
             ussdRepository.save(sessionussd);
             map.put("message", "Entrez la Date de Naissance~0.Annuler ");
@@ -135,7 +141,7 @@ public class UssdRestController {
         }
           
            //Save Date
-          if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null && sessionussd.getCni()!=null) {
+          if (!"0".equals(pojoUssd.getMessage()) &&  sessionussd.getAccess().equals("Naissance")) {
            
             Responses response = new Responses();
             response = ussdservice.CheckDate(pojoUssd.getMessage());
@@ -151,6 +157,7 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
+            sessionussd.setAccess("Lieu");
             sessionussd.setDatenaissance(pojoUssd.getMessage());
             ussdRepository.save(sessionussd);
             map.put("message", "Entrez le Lieu de Naissance~0.Annuler ");
@@ -159,8 +166,9 @@ public class UssdRestController {
         }
           
           //Save lieu lieu de naissance
-           if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null && sessionussd.getCni()!=null) {
-         
+           if (!"0".equals(pojoUssd.getMessage()) &&  sessionussd.getAccess().equals("Lieu")) {
+            
+             sessionussd.setAccess("Contribuable");
             sessionussd.setLieunaissance(pojoUssd.getMessage());
             ussdRepository.save(sessionussd);
             map.put("message", "Entrez le Numero de Contribuable~0.Annuler ");
@@ -171,7 +179,7 @@ public class UssdRestController {
            
           //Save Contribuable 
            
-           if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null && sessionussd.getCni()!=null) {
+           if (!"0".equals(pojoUssd.getMessage()) &&  sessionussd.getAccess().equals("Contribuable")) {
             Responses response = new Responses();
             response = ussdservice.CheckContribuable(pojoUssd.getMessage());
          
@@ -186,6 +194,7 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
+            sessionussd.setAccess("email");
             sessionussd.setNumbcontribuable(pojoUssd.getMessage());
             ussdRepository.save(sessionussd);
             map.put("message", "Entrez votre adresse email~0.Annuler ");
@@ -194,7 +203,7 @@ public class UssdRestController {
         }
            
            //Save Email       
-           if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null && sessionussd.getCni()!=null) {
+           if (!"0".equals(pojoUssd.getMessage()) &&  sessionussd.getAccess().equals("email")) {
             Responses response = new Responses();
             response = ussdservice.CheckEmail(pojoUssd.getMessage());
          
@@ -209,6 +218,7 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
+             sessionussd.setAccess("secret");
             sessionussd.setEmail(pojoUssd.getMessage());
             ussdRepository.save(sessionussd);
             map.put("message", "Entrez votre code secret~0.Annuler ");
@@ -217,8 +227,9 @@ public class UssdRestController {
         }
            
            //Save code secret
-            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null && sessionussd.getCni()!=null) {
+            if (!"0".equals(pojoUssd.getMessage()) &&  sessionussd.getAccess().equals("secret")) {
            
+            sessionussd.setAccess("confirmeCode");
             sessionussd.setCodesecret(pojoUssd.getMessage());
             ussdRepository.save(sessionussd);
             map.put("message", "Confirmez votre CodeSecret~0.Annuler ");
@@ -226,8 +237,8 @@ public class UssdRestController {
             return map;
         }
             
-            //confirmation du code secret
-             if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null && sessionussd.getCni()!=null) {
+            //Save confirmation du code secret
+             if (!"0".equals(pojoUssd.getMessage())  &&  sessionussd.getAccess().equals("confirmeCode")) {
             Responses response = new Responses();
             response = ussdservice.ConfirmCodeSecret(sessionussd.getCodesecret(),pojoUssd.getMessage());
          
@@ -242,7 +253,7 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
-             
+            sessionussd.setAccess(null);
             sessionussd.setNewcode(pojoUssd.getMessage());
             ussdRepository.save(sessionussd);
             response = new Responses();
@@ -261,20 +272,20 @@ public class UssdRestController {
             Responses response = new Responses();
             response = ussdservice.CheckCompteExpediteur(pojoUssd.getMsisdn());
             if (response.getSucces() == -1) {
-                 sessionussd.setAccess(0);
+                 sessionussd.setAccess("0");
                   ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
             }
             if (response.getSucces() == 0) {
-                 sessionussd.setAccess(0);
+                 sessionussd.setAccess("0");
                   ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
             }
-            sessionussd.setAccess(1);
+           
             sessionussd.setLastsep(sessionussd.getMessage() + "*1");
             ussdRepository.save(sessionussd);
 
@@ -507,20 +518,20 @@ public class UssdRestController {
             Responses response = new Responses();
             response = ussdservice.CheckCompteExpediteur(pojoUssd.getMsisdn());
             if (response.getSucces() == -1) {
-                 sessionussd.setAccess(0);
+                 sessionussd.setAccess("0");
                   ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
             }
             if (response.getSucces() == 0) {
-                 sessionussd.setAccess(0);
+                 sessionussd.setAccess("0");
                   ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
             }
-            sessionussd.setAccess(1);
+           
             sessionussd.setLastsep(sessionussd.getMessage() + "*2");
             ussdRepository.save(sessionussd);
             map.put("message", "Paiement Marchand~1.Nouveau Paiement~2.Checker un code marchand~0.Retour");
@@ -702,20 +713,20 @@ public class UssdRestController {
             Responses response = new Responses();
             response = ussdservice.CheckCompteExpediteur(pojoUssd.getMsisdn());
             if (response.getSucces() == -1) {
-                 sessionussd.setAccess(0);
+                 sessionussd.setAccess("0");
                   ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
             }
             if (response.getSucces() == 0) {
-                 sessionussd.setAccess(0);
+                 sessionussd.setAccess("0");
                   ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
             }
-            sessionussd.setAccess(1);
+            
             sessionussd.setLastsep(sessionussd.getMessage() + "*3");
             ussdRepository.save(sessionussd);
             map.put("message", "Selectionner votre banque parmi nos banques partenaires~1.UBA~2.Afriland~3.Banque Atlantique~4.Ecobank~5.Societe Generale~0.Retour ");
@@ -764,20 +775,20 @@ public class UssdRestController {
             Responses response = new Responses();
             response = ussdservice.CheckCompteExpediteur(pojoUssd.getMsisdn());
             if (response.getSucces() == -1) {
-                 sessionussd.setAccess(0);
+                 sessionussd.setAccess("0");
                   ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
             }
             if (response.getSucces() == 0) {
-                 sessionussd.setAccess(0);
+                 sessionussd.setAccess("0");
                   ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
             }
-            sessionussd.setAccess(1);
+           
             sessionussd.setLastsep(sessionussd.getMessage() + "*4");
             ussdRepository.save(sessionussd);
             map.put("message", "Services Tierces~1.Payez un abonnement GEDOMED~2.Payez une licence IPLANS ERP~3.Payer Cotisation ONMC~4.Payer Frais etude de dossier ONMC~5.Payer Frais de siege ONMC~6.Payer Facture ENEO~7.Payer Facture CAMWATER~0.Retour ");
@@ -806,20 +817,20 @@ public class UssdRestController {
             Responses response = new Responses();
             response = ussdservice.CheckCompteExpediteur(pojoUssd.getMsisdn());
             if (response.getSucces() == -1) {
-                 sessionussd.setAccess(0);
+                 sessionussd.setAccess("0");
                   ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
             }
             if (response.getSucces() == 0) {
-                 sessionussd.setAccess(0);
+                 sessionussd.setAccess("0");
                   ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
             }
-            sessionussd.setAccess(1);
+            
             sessionussd.setLastsep(sessionussd.getMessage() + "*5");
             ussdRepository.save(sessionussd);
             map.put("message", "Mon compte PerfectPay~1.Consulter solde~2.Modifier Code PIN~3.Consulter dernieres transactions~4.Changer de langue~0.Retour ");

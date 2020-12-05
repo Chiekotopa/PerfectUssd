@@ -56,7 +56,7 @@ public class Sessionussd implements Serializable {
     @Column(name = "codemarchant")
     private String codemarchant;
     @Column(name = "access")
-    private Integer access;
+    private String access;
     @Column(name = "nom")
     private String nom;
     @Column(name = "prenom")
@@ -169,11 +169,11 @@ public class Sessionussd implements Serializable {
         this.codemarchant = codemarchant;
     }
 
-    public Integer getAccess() {
+    public String getAccess() {
         return access;
     }
 
-    public void setAccess(Integer access) {
+    public void setAccess(String access) {
         this.access = access;
     }
 
