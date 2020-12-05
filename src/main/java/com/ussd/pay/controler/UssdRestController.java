@@ -46,6 +46,7 @@ public class UssdRestController {
                 sessionussd.setMsisdn(pojoUssd.getMsisdn());
                 sessionussd.setProvider(pojoUssd.getProvider());
                 sessionussd.setSessionid(pojoUssd.getSessionid());
+                sessionussd.setAccess("0");
                 sessionussd.setLastsep("237*100");
                 ussdRepository.save(sessionussd);
                 map.put("message", "Bienvenue sur PerfectPay~1.Transfert d'argent~2.Paiement Marchand~3.Operations Bancaires~4.Services Tiers~5.Mon compte~0.Annuler ");
@@ -60,9 +61,16 @@ public class UssdRestController {
         
         //Creation de compte ***************************************************************************************************************************************        
       
-        if (pojoUssd.getMessage().equals("1") && sessionussd.getAccess().equals("0")) {
-            
-            sessionussd.setAccess("nom");
+        if(pojoUssd.getMessage().equals("0") && !sessionussd.getAccess().equals("0")){
+           sessionussd.setAccess("0"); 
+           ussdRepository.save(sessionussd);
+            map.put("message", "Bienvenue sur PerfectPay~1.Transfert d'argent~2.Paiement Marchand~3.Operations Bancaires~4.Services Tiers~5.Mon compte~0.Annuler  ");
+            map.put("command", "1");
+            return map;
+           
+        }
+        if (pojoUssd.getMessage().equals("1") && sessionussd.getAccess().equals("1")) {
+             sessionussd.setAccess("nom");
             ussdRepository.save(sessionussd);
             map.put("message", "Entrez le nom~0.Annuler ");
             map.put("command", "1");
@@ -272,7 +280,7 @@ public class UssdRestController {
             Responses response = new Responses();
             response = ussdservice.CheckCompteExpediteur(pojoUssd.getMsisdn());
             if (response.getSucces() == -1) {
-                 sessionussd.setAccess("0");
+                 sessionussd.setAccess("1");
                   ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
@@ -518,7 +526,7 @@ public class UssdRestController {
             Responses response = new Responses();
             response = ussdservice.CheckCompteExpediteur(pojoUssd.getMsisdn());
             if (response.getSucces() == -1) {
-                 sessionussd.setAccess("0");
+                 sessionussd.setAccess("1");
                   ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
@@ -708,12 +716,15 @@ public class UssdRestController {
             return map;
         }
 
+        
+        
+        
         //opération banquaire  ------------------------------------------------------------------------------------------------------------------------------------------
         if (pojoUssd.getMessage().equals("3") && sessionussd.getLastsep().equals("237*100")) {
             Responses response = new Responses();
             response = ussdservice.CheckCompteExpediteur(pojoUssd.getMsisdn());
             if (response.getSucces() == -1) {
-                 sessionussd.setAccess("0");
+                 sessionussd.setAccess("1");
                   ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
@@ -775,7 +786,7 @@ public class UssdRestController {
             Responses response = new Responses();
             response = ussdservice.CheckCompteExpediteur(pojoUssd.getMsisdn());
             if (response.getSucces() == -1) {
-                 sessionussd.setAccess("0");
+                 sessionussd.setAccess("1");
                   ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
@@ -817,7 +828,7 @@ public class UssdRestController {
             Responses response = new Responses();
             response = ussdservice.CheckCompteExpediteur(pojoUssd.getMsisdn());
             if (response.getSucces() == -1) {
-                 sessionussd.setAccess("0");
+                 sessionussd.setAccess("1");
                   ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
