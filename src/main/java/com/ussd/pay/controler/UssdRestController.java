@@ -56,16 +56,220 @@ public class UssdRestController {
         sessionussd = new Sessionussd();
         sessionussd = ussdRepository.findApiBySessionId(pojoUssd.getSessionid());
        
+   
         
-        if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100")) {
+        //Creation de compte ***************************************************************************************************************************************        
+      
+        if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null) {
+            
+            map.put("message", "Entrez le nom~0.Annuler ");
+            map.put("command", "1");
+            return map;
+        }
+       //Save nom 
+         if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null && sessionussd.getNom()==null) {
+           
+            sessionussd.setNom(pojoUssd.getMessage());
+            ussdRepository.save(sessionussd);
+            map.put("message", "Entrez le prenom~0.Annuler ");
+            map.put("command", "1");
+            return map;
+        }
+         
+         //Save prenom
+         if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null && sessionussd.getNom()!=null) {
+           
+            sessionussd.setPrenom(pojoUssd.getMessage());
+            ussdRepository.save(sessionussd);
+            map.put("message", "Entrez le Numero de CNI~0.Annuler ");
+            map.put("command", "1");
+            return map;
+        }
+         
+         //Save CNI
+          if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null && sessionussd.getPrenom()!=null) {
+           
             Responses response = new Responses();
-            response = ussdservice.CheckCompteExpediteur(pojoUssd.getMsisdn());
+            response = ussdservice.CheckCni(pojoUssd.getMessage());
+         
             if (response.getSucces() == -1) {
                 map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
             }
+            
+             if (response.getSucces() == 0) {
+                map.put("message", response.getMsg());
+                map.put("command", "1");
+                return map;
+            }
+            sessionussd.setCni(pojoUssd.getMessage());
+            ussdRepository.save(sessionussd);
+            map.put("message", "Choisir le Sexe~1.MAsculin~2.Feminin~0.Annuler ");
+            map.put("command", "1");
+            return map;
+        }
+          
+           //Save Sexe
+          if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null && sessionussd.getCni()!=null) {
+           
+            Responses response = new Responses();
+            response = ussdservice.CheckSexe(pojoUssd.getMessage());
+         
+            if (response.getSucces() == -1) {
+                map.put("message", response.getMsg());
+                map.put("command", "1");
+                return map;
+            }
+            
+             if (response.getSucces() == 0) {
+                map.put("message", response.getMsg());
+                map.put("command", "1");
+                return map;
+            }
+            sessionussd.setSexe(pojoUssd.getMessage());
+            ussdRepository.save(sessionussd);
+            map.put("message", "Entrez la Date de Naissance~0.Annuler ");
+            map.put("command", "1");
+            return map;
+        }
+          
+           //Save Date
+          if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null && sessionussd.getCni()!=null) {
+           
+            Responses response = new Responses();
+            response = ussdservice.CheckDate(pojoUssd.getMessage());
+         
+            if (response.getSucces() == -1) {
+                map.put("message", response.getMsg());
+                map.put("command", "1");
+                return map;
+            }
+            
+             if (response.getSucces() == 0) {
+                map.put("message", response.getMsg());
+                map.put("command", "1");
+                return map;
+            }
+            sessionussd.setDatenaissance(pojoUssd.getMessage());
+            ussdRepository.save(sessionussd);
+            map.put("message", "Entrez le Lieu de Naissance~0.Annuler ");
+            map.put("command", "1");
+            return map;
+        }
+          
+          //Save lieu lieu de naissance
+           if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null && sessionussd.getCni()!=null) {
+         
+            sessionussd.setLieunaissance(pojoUssd.getMessage());
+            ussdRepository.save(sessionussd);
+            map.put("message", "Entrez le Numero de Contribuable~0.Annuler ");
+            map.put("command", "1");
+            return map;
+        }
+           
+           
+          //Save Contribuable 
+           
+           if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null && sessionussd.getCni()!=null) {
+            Responses response = new Responses();
+            response = ussdservice.CheckContribuable(pojoUssd.getMessage());
+         
+            if (response.getSucces() == -1) {
+                map.put("message", response.getMsg());
+                map.put("command", "1");
+                return map;
+            }
+            
+             if (response.getSucces() == 0) {
+                map.put("message", response.getMsg());
+                map.put("command", "1");
+                return map;
+            }
+            sessionussd.setNumbcontribuable(pojoUssd.getMessage());
+            ussdRepository.save(sessionussd);
+            map.put("message", "Entrez votre adresse email~0.Annuler ");
+            map.put("command", "1");
+            return map;
+        }
+           
+           //Save Email       
+           if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null && sessionussd.getCni()!=null) {
+            Responses response = new Responses();
+            response = ussdservice.CheckEmail(pojoUssd.getMessage());
+         
+            if (response.getSucces() == -1) {
+                map.put("message", response.getMsg());
+                map.put("command", "1");
+                return map;
+            }
+            
+             if (response.getSucces() == 0) {
+                map.put("message", response.getMsg());
+                map.put("command", "1");
+                return map;
+            }
+            sessionussd.setEmail(pojoUssd.getMessage());
+            ussdRepository.save(sessionussd);
+            map.put("message", "Entrez votre code secret~0.Annuler ");
+            map.put("command", "1");
+            return map;
+        }
+           
+           //Save code secret
+            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null && sessionussd.getCni()!=null) {
+           
+            sessionussd.setCodesecret(pojoUssd.getMessage());
+            ussdRepository.save(sessionussd);
+            map.put("message", "Confirmez votre CodeSecret~0.Annuler ");
+            map.put("command", "1");
+            return map;
+        }
+            
+            //confirmation du code secret
+             if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()!=null && sessionussd.getCni()!=null) {
+            Responses response = new Responses();
+            response = ussdservice.ConfirmCodeSecret(sessionussd.getCodesecret(),pojoUssd.getMessage());
+         
+            if (response.getSucces() == -1) {
+                map.put("message", response.getMsg());
+                map.put("command", "1");
+                return map;
+            }
+            
+             if (response.getSucces() == 0) {
+                map.put("message", response.getMsg());
+                map.put("command", "1");
+                return map;
+            }
+             
+            sessionussd.setNewcode(pojoUssd.getMessage());
+            ussdRepository.save(sessionussd);
+            response = new Responses();
+            response = ussdservice.CreateAccountUssd(sessionussd);
+            map.put("message", response.getMsg()+"~0.Retour ");
+            map.put("command", "1");
+            return map;
+        }
+        
+     
+             
+             
+     //Transfert d'argent ***********************************************************************************************************************************************       
+             
+             if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100")) {
+            Responses response = new Responses();
+            response = ussdservice.CheckCompteExpediteur(pojoUssd.getMsisdn());
+            if (response.getSucces() == -1) {
+                 sessionussd.setAccess(0);
+                  ussdRepository.save(sessionussd);
+                map.put("message", response.getMsg());
+                map.put("command", "1");
+                return map;
+            }
             if (response.getSucces() == 0) {
+                 sessionussd.setAccess(0);
+                  ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
@@ -303,11 +507,15 @@ public class UssdRestController {
             Responses response = new Responses();
             response = ussdservice.CheckCompteExpediteur(pojoUssd.getMsisdn());
             if (response.getSucces() == -1) {
+                 sessionussd.setAccess(0);
+                  ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
             }
             if (response.getSucces() == 0) {
+                 sessionussd.setAccess(0);
+                  ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
@@ -494,11 +702,15 @@ public class UssdRestController {
             Responses response = new Responses();
             response = ussdservice.CheckCompteExpediteur(pojoUssd.getMsisdn());
             if (response.getSucces() == -1) {
+                 sessionussd.setAccess(0);
+                  ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
             }
             if (response.getSucces() == 0) {
+                 sessionussd.setAccess(0);
+                  ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
@@ -543,16 +755,24 @@ public class UssdRestController {
             return map;
         }
 
+        
+        
+        
+        
         //Service tierce  ------------------------------------------------------------------------------------------------------------------------------------------
         if (pojoUssd.getMessage().equals("4") && sessionussd.getLastsep().equals("237*100")) {
             Responses response = new Responses();
             response = ussdservice.CheckCompteExpediteur(pojoUssd.getMsisdn());
             if (response.getSucces() == -1) {
+                 sessionussd.setAccess(0);
+                  ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
             }
             if (response.getSucces() == 0) {
+                 sessionussd.setAccess(0);
+                  ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
@@ -586,11 +806,15 @@ public class UssdRestController {
             Responses response = new Responses();
             response = ussdservice.CheckCompteExpediteur(pojoUssd.getMsisdn());
             if (response.getSucces() == -1) {
+                 sessionussd.setAccess(0);
+                  ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
             }
             if (response.getSucces() == 0) {
+                 sessionussd.setAccess(0);
+                  ussdRepository.save(sessionussd);
                 map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
@@ -841,213 +1065,8 @@ public class UssdRestController {
         }
         
         
-        
-        
-        
-        //Creation de compte ***************************************************************************************************************************************        
-      
-        if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()==0) {
-            
-            map.put("message", "Entrez le nom~0.Annuler ");
-            map.put("command", "1");
-            return map;
-        }
-       //Save nom 
-         if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()==0 && sessionussd.getNom()==null) {
-           
-            sessionussd.setNom(pojoUssd.getMessage());
-            ussdRepository.save(sessionussd);
-            map.put("message", "Entrez le prenom~0.Annuler ");
-            map.put("command", "1");
-            return map;
-        }
-         
-         //Save prenom
-         if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()==0 && sessionussd.getNom()!=null) {
-           
-            sessionussd.setPrenom(pojoUssd.getMessage());
-            ussdRepository.save(sessionussd);
-            map.put("message", "Entrez le Numero de CNI~0.Annuler ");
-            map.put("command", "1");
-            return map;
-        }
-         
-         //Save CNI
-          if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()==0 && sessionussd.getPrenom()!=null) {
-           
-            Responses response = new Responses();
-            response = ussdservice.CheckCni(pojoUssd.getMessage());
-         
-            if (response.getSucces() == -1) {
-                map.put("message", response.getMsg());
-                map.put("command", "1");
-                return map;
-            }
-            
-             if (response.getSucces() == 0) {
-                map.put("message", response.getMsg());
-                map.put("command", "1");
-                return map;
-            }
-            sessionussd.setCni(pojoUssd.getMessage());
-            ussdRepository.save(sessionussd);
-            map.put("message", "Choisir le Sexe~1.MAsculin~2.Feminin~0.Annuler ");
-            map.put("command", "1");
-            return map;
-        }
           
-           //Save Sexe
-          if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()==0 && sessionussd.getCni()!=null) {
-           
-            Responses response = new Responses();
-            response = ussdservice.CheckSexe(pojoUssd.getMessage());
-         
-            if (response.getSucces() == -1) {
-                map.put("message", response.getMsg());
-                map.put("command", "1");
-                return map;
-            }
-            
-             if (response.getSucces() == 0) {
-                map.put("message", response.getMsg());
-                map.put("command", "1");
-                return map;
-            }
-            sessionussd.setSexe(pojoUssd.getMessage());
-            ussdRepository.save(sessionussd);
-            map.put("message", "Entrez la Date de Naissance~0.Annuler ");
-            map.put("command", "1");
-            return map;
-        }
-          
-           //Save Date
-          if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()==0 && sessionussd.getCni()!=null) {
-           
-            Responses response = new Responses();
-            response = ussdservice.CheckDate(pojoUssd.getMessage());
-         
-            if (response.getSucces() == -1) {
-                map.put("message", response.getMsg());
-                map.put("command", "1");
-                return map;
-            }
-            
-             if (response.getSucces() == 0) {
-                map.put("message", response.getMsg());
-                map.put("command", "1");
-                return map;
-            }
-            sessionussd.setDatenaissance(pojoUssd.getMessage());
-            ussdRepository.save(sessionussd);
-            map.put("message", "Entrez le Lieu de Naissance~0.Annuler ");
-            map.put("command", "1");
-            return map;
-        }
-          
-          //Save lieu lieu de naissance
-           if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()==0 && sessionussd.getCni()!=null) {
-         
-            sessionussd.setLieunaissance(pojoUssd.getMessage());
-            ussdRepository.save(sessionussd);
-            map.put("message", "Entrez le Numero de Contribuable~0.Annuler ");
-            map.put("command", "1");
-            return map;
-        }
-           
-           
-          //Save Contribuable 
-           
-           if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()==0 && sessionussd.getCni()!=null) {
-            Responses response = new Responses();
-            response = ussdservice.CheckContribuable(pojoUssd.getMessage());
-         
-            if (response.getSucces() == -1) {
-                map.put("message", response.getMsg());
-                map.put("command", "1");
-                return map;
-            }
-            
-             if (response.getSucces() == 0) {
-                map.put("message", response.getMsg());
-                map.put("command", "1");
-                return map;
-            }
-            sessionussd.setNumbcontribuable(pojoUssd.getMessage());
-            ussdRepository.save(sessionussd);
-            map.put("message", "Entrez votre adresse email~0.Annuler ");
-            map.put("command", "1");
-            return map;
-        }
-           
-           //Save Email       
-           if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()==0 && sessionussd.getCni()!=null) {
-            Responses response = new Responses();
-            response = ussdservice.CheckEmail(pojoUssd.getMessage());
-         
-            if (response.getSucces() == -1) {
-                map.put("message", response.getMsg());
-                map.put("command", "1");
-                return map;
-            }
-            
-             if (response.getSucces() == 0) {
-                map.put("message", response.getMsg());
-                map.put("command", "1");
-                return map;
-            }
-            sessionussd.setEmail(pojoUssd.getMessage());
-            ussdRepository.save(sessionussd);
-            map.put("message", "Entrez votre code secret~0.Annuler ");
-            map.put("command", "1");
-            return map;
-        }
-           
-           //Save code secret
-            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()==0 && sessionussd.getCni()!=null) {
-           
-            sessionussd.setCodesecret(pojoUssd.getMessage());
-            ussdRepository.save(sessionussd);
-            map.put("message", "Confirmez votre CodeSecret~0.Annuler ");
-            map.put("command", "1");
-            return map;
-        }
-            
-            //confirmation du code secret
-             if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()==0 && sessionussd.getCni()!=null) {
-            Responses response = new Responses();
-            response = ussdservice.ConfirmCodeSecret(sessionussd.getCodesecret(),pojoUssd.getMessage());
-         
-            if (response.getSucces() == -1) {
-                map.put("message", response.getMsg());
-                map.put("command", "1");
-                return map;
-            }
-            
-             if (response.getSucces() == 0) {
-                map.put("message", response.getMsg());
-                map.put("command", "1");
-                return map;
-            }
-             
-            sessionussd.setNewcode(pojoUssd.getMessage());
-            ussdRepository.save(sessionussd);
-            response = new Responses();
-            response = ussdservice.CreateAccountUssd(sessionussd));
-            map.put("message", response.getMsg()+"~0.Retour ");
-            map.put("command", "1");
-            return map;
-        }
-          
-         
-        
-          if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100")&& sessionussd.getAccess()==0 && sessionussd.getNom()==null) {
-            
-
-            map.put("message", "Entrer le nom~0.Annuler ");
-            map.put("command", "1");
-            return map;
-        }
-        
+       
         
         if (pojoUssd.getMessage()
                 .equals("0")) {
