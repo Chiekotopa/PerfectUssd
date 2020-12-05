@@ -130,20 +130,20 @@ public class UssdRestController {
             response = ussdservice.CheckSexe(pojoUssd.getMessage());
          
             if (response.getSucces() == -1) {
-                map.put("message", response.getMsg());
+                map.put("message", response.getMsg()+"~1.MAsculin~2.Feminin~0.Annuler");
                 map.put("command", "1");
                 return map;
             }
             
              if (response.getSucces() == 0) {
-                map.put("message", response.getMsg());
+                map.put("message", response.getMsg()+"~1.MAsculin~2.Feminin~0.Annuler");
                 map.put("command", "1");
                 return map;
             }
             sessionussd.setAccess("Naissance");
             sessionussd.setSexe(pojoUssd.getMessage());
             ussdRepository.save(sessionussd);
-            map.put("message", "Entrez la Date de Naissance~0.Annuler ");
+            map.put("message", "Entrez la Date de Naissance au format JJ/MM/AAAA~0.Annuler ");
             map.put("command", "1");
             return map;
         }
@@ -221,7 +221,7 @@ public class UssdRestController {
                 return map;
             }
             
-             if (response.getSucces() == 0) {
+             if (response.getSucces() == -2) {
                 map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
@@ -262,6 +262,8 @@ public class UssdRestController {
                 return map;
             }
             sessionussd.setAccess(null);
+            sessionussd.setNewcode(null);
+            sessionussd.setCodesecret(null);
             sessionussd.setNewcode(pojoUssd.getMessage());
             ussdRepository.save(sessionussd);
             response = new Responses();

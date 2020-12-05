@@ -270,7 +270,7 @@ public class UssdService {
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
 
-        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=Verification_CodeSecret&CodeSecret="+codeSecret+"&CodeSecret_repeat="+codeRepead+"";
+        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=Verification_Codes_Secrets&CodeSecret="+codeSecret+"&CodeSecret_repeat="+codeRepead+"";
         response = restTemplate.getForObject(url, Responses.class, response);
 
         return response;
