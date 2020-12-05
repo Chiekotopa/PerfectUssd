@@ -76,7 +76,7 @@ public class Sessionussd implements Serializable {
 
     public Sessionussd() {
     }
-
+//test
     public Sessionussd(Integer idussd) {
         this.idussd = idussd;
     }
