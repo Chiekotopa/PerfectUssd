@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Administrateur
+ * @author Carlos TCHIOZEM
  */
 @Entity
 @Table(name = "sessionussd")
@@ -46,6 +46,8 @@ public class Sessionussd implements Serializable {
     private String lastsep;
     @Column(name = "destinataire")
     private String destinataire;
+    @Column(name = "phoneagent")
+    private String phoneagent;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "montant")
     private Double montant;
@@ -73,10 +75,12 @@ public class Sessionussd implements Serializable {
     private String numbcontribuable;
     @Column(name = "email")
     private String email;
+    @Column(name = "type")
+    private String type;
 
     public Sessionussd() {
     }
-//test
+
     public Sessionussd(Integer idussd) {
         this.idussd = idussd;
     }
@@ -135,6 +139,14 @@ public class Sessionussd implements Serializable {
 
     public void setDestinataire(String destinataire) {
         this.destinataire = destinataire;
+    }
+
+    public String getPhoneagent() {
+        return phoneagent;
+    }
+
+    public void setPhoneagent(String phoneagent) {
+        this.phoneagent = phoneagent;
     }
 
     public Double getMontant() {
@@ -239,6 +251,14 @@ public class Sessionussd implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override

@@ -3,6 +3,7 @@
   <persistence-unit name="com.ussd_pay_jar_0.0.1-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>com.ussd.pay.entities.Sessionussd</class>
+    <class>com.ussd.pay.entities.Sessiontrans</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://154.72.148.105:5785/perfectpay?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="administrator"/>

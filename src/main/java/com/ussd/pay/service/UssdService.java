@@ -298,7 +298,7 @@ public class UssdService {
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
 
-        String url = "http://localhost/apipayment/api-perfectpay.php?action=Verification_CodeSecret&CodeSecret=" + secretCode + "";
+        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=Verification_CodeSecret&CodeSecret=" + secretCode + "";
         response = restTemplate.getForObject(url, Responses.class, response);
 
         return response;
@@ -311,7 +311,46 @@ public class UssdService {
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
 
-        String url = "http://localhost/apipayment/api-perfectpay.php?action=checker_compte_Expediteur_menu&Code_client="+tel+"";
+        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=checker_compte_Expediteur_menu&Code_client="+tel+"";
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
+     
+      public Responses checkerCompteClientetrait(String codeClient, String phoneDest) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=checker_compte_client_retrait&Code_clientExpediteur="+codeClient+"&Code_clientDestinataire="+phoneDest+"";
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
+      
+        public Responses checkerSoldeExpediteurRetrait(String codeClient, String phoneDest,Double solde) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=checker_solde_expediteur_retrait&Code_clientExpediteur="+codeClient+"&Code_clientDestinataire="+phoneDest+"&Montant="+solde+"";
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
+   
+         public Responses validationInitilisationRretraitAccountPerfectPay(String codeClient, String phoneDest,Double solde,String securiteCode) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=validation_Initilisation_retrait_account_perfect_pay&Code_clientExpediteur="+codeClient+"&Code_clientDestinataire="+phoneDest+"&Montant="+solde+"&CodeSecurite="+securiteCode+"";
         response = restTemplate.getForObject(url, Responses.class, response);
 
         return response;
