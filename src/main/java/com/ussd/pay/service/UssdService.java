@@ -192,12 +192,12 @@ public class UssdService {
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
 
-        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=paiement_marchand_ussd&Code_client="+codeClient+"&CodeMarchand="+codeMarchand+"&Montant="+montant+"&CodeSecurite="+codeSecurite+"";
+        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=paiement_marchand_ussd&Code_client=" + codeClient + "&CodeMarchand=" + codeMarchand + "&Montant=" + montant + "&CodeSecurite=" + codeSecurite + "";
         response = restTemplate.getForObject(url, Responses.class, response);
 
         return response;
     }
-    
+
     public Responses CheckCni(String Cni) {
         Responses response = new Responses();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
@@ -205,93 +205,138 @@ public class UssdService {
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
 
-        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=Verification_CNI&NumeroCNI="+Cni+"";
+        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=Verification_CNI&NumeroCNI=" + Cni + "";
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
+
+    public Responses CheckSexe(String Sexe) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=Verification_Sexe&Sexe=" + Sexe + "";
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
+
+    public Responses CheckDate(String Date) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=Verification_DateNaissance&DateNaissance=" + Date + "";
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
+
+    public Responses CheckContribuable(String numContribuable) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=Verification_NumeroContribuable&NumeroContribuable=" + numContribuable + "";
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
+
+    public Responses CheckEmail(String email) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=Verification_Email&Email=" + email + "";
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
+
+    public Responses ConfirmCodeSecret(String codeSecret, String codeRepead) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=Verification_Codes_Secrets&CodeSecret=" + codeSecret + "&CodeSecret_repeat=" + codeRepead + "";
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
+
+    public Responses CreateAccountUssd(Sessionussd sessionUssd) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=create_account_ussd&Nom=" + sessionUssd.getNom() + "&Prenom=" + sessionUssd.getPrenom() + "&NumeroCNI=" + sessionUssd.getCni() + "&Telephone=" + sessionUssd.getMsisdn() + ""
+                + "&Sexe=" + sessionUssd.getSexe() + "&DateNaissance=" + sessionUssd.getDatenaissance() + "&LieuNaissance=" + sessionUssd.getLieunaissance() + "&NumeroContribuable=" + sessionUssd.getNumbcontribuable()
+                + "&CodeSecret=" + sessionUssd.getCodesecret() + "&Email=" + sessionUssd.getEmail() + "";
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
+
+    public Responses checkCodeSecretForNewAccount(String secretCode) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "http://localhost/apipayment/api-perfectpay.php?action=Verification_CodeSecret&CodeSecret=" + secretCode + "";
         response = restTemplate.getForObject(url, Responses.class, response);
 
         return response;
     }
     
-       public Responses CheckSexe(String Sexe) {
+     public Responses checkCompteExpediteurMenu(String tel) {
         Responses response = new Responses();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
         String boString = "";
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
 
-        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=Verification_Sexe&Sexe="+Sexe+"";
+        String url = "http://localhost/apipayment/api-perfectpay.php?action=checker_compte_Expediteur_menu&Code_client="+tel+"";
         response = restTemplate.getForObject(url, Responses.class, response);
 
         return response;
     }
-       
-        public Responses CheckDate(String Date) {
-        Responses response = new Responses();
-        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
-        String boString = "";
-        headers.set(HttpHeaders.ACCEPT, "application/json");
-        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+   
 
-        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=Verification_DateNaissance&DateNaissance="+Date+"";
-        response = restTemplate.getForObject(url, Responses.class, response);
+    public String replaceChaine(String chaine) {
 
-        return response;
+        String originalstring = chaine;
+        String replace1 = originalstring.replace('%', ' ');
+        replace1 = replace1.replace('2', ' ');
+        replace1 = replace1.replace('0', ' ');
+        System.out.println(replace1);
+
+        return replace1;
     }
-        
-        public Responses CheckContribuable(String numContribuable) {
-        Responses response = new Responses();
-        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
-        String boString = "";
-        headers.set(HttpHeaders.ACCEPT, "application/json");
-        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
 
-        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=Verification_NumeroContribuable&NumeroContribuable="+numContribuable+"";
-        response = restTemplate.getForObject(url, Responses.class, response);
+    public String replaceChaine2(String chaine) {
 
-        return response;
+        String originalstring = chaine;
+        String replace1 = originalstring.replace('?','@');
+
+        System.out.println(replace1);
+
+        return replace1;
     }
-        
-         public Responses CheckEmail(String email) {
-        Responses response = new Responses();
-        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
-        String boString = "";
-        headers.set(HttpHeaders.ACCEPT, "application/json");
-        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
 
-        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=Verification_Email&Email="+email+"";
-        response = restTemplate.getForObject(url, Responses.class, response);
-
-        return response;
-    }
-         
-          public Responses ConfirmCodeSecret(String codeSecret, String codeRepead) {
-        Responses response = new Responses();
-        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
-        String boString = "";
-        headers.set(HttpHeaders.ACCEPT, "application/json");
-        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
-
-        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=Verification_Codes_Secrets&CodeSecret="+codeSecret+"&CodeSecret_repeat="+codeRepead+"";
-        response = restTemplate.getForObject(url, Responses.class, response);
-
-        return response;
-    }
-          
-          
-        public Responses CreateAccountUssd(Sessionussd sessionUssd) {
-        Responses response = new Responses();
-        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
-        String boString = "";
-        headers.set(HttpHeaders.ACCEPT, "application/json");
-        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
-
-        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=create_account_ussd&Nom="+sessionUssd.getNom()+"&Prenom="+sessionUssd.getPrenom()+"&NumeroCNI="+sessionUssd.getCni()+"&Telephone="+sessionUssd.getMsisdn()+""
-                + "&Sexe="+sessionUssd.getSexe()+"&DateNaissance="+sessionUssd.getDatenaissance()+"&LieuNaissance="+sessionUssd.getLieunaissance()+"&NumeroContribuable="+sessionUssd.getNumbcontribuable()+
-                "&CodeSecret="+sessionUssd.getCodesecret()+"&Email="+sessionUssd.getEmail()+"";
-        response = restTemplate.getForObject(url, Responses.class, response);
-
-        return response;
-    }
-          
 }
-
-
