@@ -43,6 +43,8 @@ public class Sessiontrans implements Serializable {
     private Double montant;
     @Column(name = "status")
     private String status;
+    @Column(name = "codesecret")
+    private String codesecret;
 
     public Sessiontrans() {
     }
@@ -89,6 +91,14 @@ public class Sessiontrans implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getCodesecret() {
+        return codesecret;
+    }
+
+    public void setCodesecret(String codesecret) {
+        this.codesecret = codesecret;
     }
 
     @Override

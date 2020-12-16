@@ -5,6 +5,8 @@
  */
 package com.ussd.pay.service;
 
+import com.ussd.pay.dao.SessiontransRepository;
+import com.ussd.pay.entities.Sessiontrans;
 import com.ussd.pay.pojo.Responses;
 import java.util.HashMap;
 import org.springframework.http.HttpEntity;
@@ -12,17 +14,26 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import com.ussd.pay.entities.Sessionussd;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
  * @author Carlos TCHIOZEM
  */
 @Service
-public class UssdService {
+public class UssdService extends Thread {
 
     HttpHeaders headers = new HttpHeaders();
 
     RestTemplate restTemplate = new RestTemplate();
+
+    @Autowired
+    SessiontransRepository sessiontransRepository;
+    
+    Sessiontrans sessiontrans=new Sessiontrans();
+    
+    
+    
 
     public void transfertToClientPerfectPay() {
         HashMap hashMap = new HashMap();
@@ -303,58 +314,72 @@ public class UssdService {
 
         return response;
     }
-    
-     public Responses checkCompteExpediteurMenu(String tel) {
+
+    public Responses checkCompteExpediteurMenu(String tel) {
         Responses response = new Responses();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
         String boString = "";
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
 
-        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=checker_compte_Expediteur_menu&Code_client="+tel+"";
+        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=checker_compte_Expediteur_menu&Code_client=" + tel + "";
         response = restTemplate.getForObject(url, Responses.class, response);
 
         return response;
     }
-     
-      public Responses checkerCompteClientetrait(String codeClient, String phoneDest) {
+
+    public Responses checkerCompteClientetrait(String codeClient, String phoneDest) {
         Responses response = new Responses();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
         String boString = "";
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
 
-        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=checker_compte_client_retrait&Code_clientExpediteur="+codeClient+"&Code_clientDestinataire="+phoneDest+"";
+        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=checker_compte_client_retrait&Code_clientExpediteur=" + codeClient + "&Code_clientDestinataire=" + phoneDest + "";
         response = restTemplate.getForObject(url, Responses.class, response);
 
         return response;
     }
-      
-        public Responses checkerSoldeExpediteurRetrait(String codeClient, String phoneDest,Double solde) {
+
+    public Responses checkerSoldeExpediteurRetrait(String codeClient, String phoneDest, Double solde) {
         Responses response = new Responses();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
         String boString = "";
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
 
-        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=checker_solde_expediteur_retrait&Code_clientExpediteur="+codeClient+"&Code_clientDestinataire="+phoneDest+"&Montant="+solde+"";
+        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=checker_solde_expediteur_retrait&Code_clientExpediteur=" + codeClient + "&Code_clientDestinataire=" + phoneDest + "&Montant=" + solde + "";
         response = restTemplate.getForObject(url, Responses.class, response);
 
         return response;
     }
-   
-         public Responses validationInitilisationRretraitAccountPerfectPay(String codeClient, String phoneDest,Double solde,String securiteCode) {
+
+    public Responses validationInitilisationRretraitAccountPerfectPay(String codeClient, String phoneDest, Double solde, String securiteCode) {
         Responses response = new Responses();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
         String boString = "";
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
 
-        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=validation_Initilisation_retrait_account_perfect_pay&Code_clientExpediteur="+codeClient+"&Code_clientDestinataire="+phoneDest+"&Montant="+solde+"&CodeSecurite="+securiteCode+"";
+        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=validation_Initilisation_retrait_account_perfect_pay&Code_clientExpediteur=" + codeClient + "&Code_clientDestinataire=" + phoneDest + "&Montant=" + solde + "&CodeSecurite=" + securiteCode + "";
         response = restTemplate.getForObject(url, Responses.class, response);
 
         return response;
     }
+
+    public Responses validationRetraitAccountPerfectPay(String ClientExp, String ClientDest, Double montant, String codeSecurite) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=validation_retrait_account_perfect_pay&Code_clientExpediteur=" + ClientExp + "&Code_clientDestinataire=" + ClientDest + "&Montant=" + montant + "&CodeSecurite=" + codeSecurite + "";
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
+
    
 
     public String replaceChaine(String chaine) {
@@ -371,7 +396,7 @@ public class UssdService {
     public String replaceChaine2(String chaine) {
 
         String originalstring = chaine;
-        String replace1 = originalstring.replace('?','@');
+        String replace1 = originalstring.replace('?', '@');
 
         System.out.println(replace1);
 

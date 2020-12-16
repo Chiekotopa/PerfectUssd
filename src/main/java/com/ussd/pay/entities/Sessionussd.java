@@ -46,8 +46,6 @@ public class Sessionussd implements Serializable {
     private String lastsep;
     @Column(name = "destinataire")
     private String destinataire;
-    @Column(name = "phoneagent")
-    private String phoneagent;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "montant")
     private Double montant;
@@ -139,14 +137,6 @@ public class Sessionussd implements Serializable {
 
     public void setDestinataire(String destinataire) {
         this.destinataire = destinataire;
-    }
-
-    public String getPhoneagent() {
-        return phoneagent;
-    }
-
-    public void setPhoneagent(String phoneagent) {
-        this.phoneagent = phoneagent;
     }
 
     public Double getMontant() {
