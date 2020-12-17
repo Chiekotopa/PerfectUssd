@@ -42,23 +42,27 @@ public class MultiThread extends Thread {
     public void run() {
         long startTime = System.currentTimeMillis();
         Sessiontrans sessiontrans = new Sessiontrans();
-        sessiontrans = sessiontransRepository.findSessiontransBySecretcode(phoneDest);
+        sessiontrans = sessiontransRepository.findBySessiontrans(phoneDest);
          List<Sessiontrans> sessions=new ArrayList<>();
         while ((System.currentTimeMillis() - startTime) < 65000) {
             try {
 
                 System.out.println(System.currentTimeMillis() - startTime);
                 Thread.sleep(3000);
+                sessiontrans=sessiontransRepository.getOne(sessiontrans.getId());
                 
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            
-            sessions=sessiontransRepository.findListSessiontransBySecretcode(phoneDest);
-                if (sessions.isEmpty()) {
+                if(sessiontrans.getStatus().equals("2")){
                     break;
                 }
+                
+                  if(sessiontrans.getStatus().equals("-1")){
+                    break;
+                }
+           
         }
         sessiontrans.setCodesecret("time out");
         sessiontrans.setStatus("0");

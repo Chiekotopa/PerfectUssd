@@ -379,6 +379,19 @@ public class UssdService extends Thread {
 
         return response;
     }
+    
+     public Responses checkerSiRetraitEnCours(String phoneDest) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "http://154.72.148.105/apipayment/api-perfectpay.php?action=checker_si_retrait_en_cours&Code_clientExpediteurint="+phoneDest+"";
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
 
    
 
