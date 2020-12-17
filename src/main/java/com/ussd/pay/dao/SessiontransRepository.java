@@ -22,8 +22,8 @@ public interface SessiontransRepository extends JpaRepository<Sessiontrans, Inte
      @Query("SELECT ss FROM Sessiontrans ss WHERE ss.phonedestinataire=?1 AND ss.codesecret='wait'")
     public Sessiontrans findSessiontransBySecretcode(String teldest);
     
-     @Query("SELECT ss FROM Sessiontrans ss WHERE ss.phonedestinataire=?1 AND ss.codesecret='wait'")
-    public List<Sessiontrans> findListSessiontransBySecretcode(String teldest);
+     @Query("SELECT ss FROM Sessiontrans ss WHERE ss.phonedestinataire=?1 AND ss.thread='1'")
+    public Sessiontrans findListSessiontransBySecretcode(String teldest);
         
     
 }

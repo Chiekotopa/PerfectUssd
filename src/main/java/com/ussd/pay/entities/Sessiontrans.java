@@ -24,7 +24,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "sessiontrans")
 @XmlRootElement
- 
 @NamedQueries({
     @NamedQuery(name = "Sessiontrans.findAll", query = "SELECT s FROM Sessiontrans s")})
 public class Sessiontrans implements Serializable {
@@ -46,6 +45,8 @@ public class Sessiontrans implements Serializable {
     private String status;
     @Column(name = "codesecret")
     private String codesecret;
+    @Column(name = "thread")
+    private String thread;
 
     public Sessiontrans() {
     }
@@ -100,6 +101,14 @@ public class Sessiontrans implements Serializable {
 
     public void setCodesecret(String codesecret) {
         this.codesecret = codesecret;
+    }
+
+    public String getThread() {
+        return thread;
+    }
+
+    public void setThread(String thread) {
+        this.thread = thread;
     }
 
     @Override
