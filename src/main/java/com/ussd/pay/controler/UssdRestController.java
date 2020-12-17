@@ -46,9 +46,14 @@ public class UssdRestController {
     public HashMap getUssd(@RequestBody PojoUssd pojoUssd) {
         HashMap map = new HashMap();
 
+        MultiThread multiThread = new MultiThread(sessiontransRepository);
+        multiThread.setphone(pojoUssd.getMsisdn());
+         multiThread.setphoneExp("237655755958");
         Sessionussd sessionussd = new Sessionussd();
         Sessiontrans sessiontrans = new Sessiontrans();
         Responses response = new Responses();
+
+        multiThread.start();
 
         try {
             System.out.println("passe *****************************************6");
@@ -269,12 +274,11 @@ public class UssdRestController {
                 sessiontrans.setPhoneagent(pojoUssd.getMsisdn());
                 sessiontrans.setPhonedestinataire("237" + sessionussd.getDestinataire());
                 sessiontrans.setStatus("1");
-                sessiontrans.setThread("1");
                 sessiontransRepository.save(sessiontrans);
                 ussdRepository.save(sessionussd);
-                MultiThread multiThread = new MultiThread(sessiontransRepository);
-                multiThread.setphone("237" + sessionussd.getDestinataire());
-                multiThread.start();
+//                MultiThread multiThread1 = new MultiThread(sessiontransRepository);
+//                multiThread.setphone("237" + sessionussd.getDestinataire());
+//                multiThread.start();
                 map.put("message", responses.getMsg());
                 map.put("command", "1");
 
