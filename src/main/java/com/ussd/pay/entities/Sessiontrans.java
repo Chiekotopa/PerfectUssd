@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "sessiontrans")
 @XmlRootElement
+ 
 @NamedQueries({
     @NamedQuery(name = "Sessiontrans.findAll", query = "SELECT s FROM Sessiontrans s")})
 public class Sessiontrans implements Serializable {

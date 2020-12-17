@@ -7,76 +7,92 @@ package com.ussd.pay.service;
 
 import com.ussd.pay.dao.SessiontransRepository;
 import com.ussd.pay.entities.Sessiontrans;
-import java.util.ArrayList;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  *
- * @author Carlos TCHIOZEM
+ * @author Chieko Topa
  */
 
-@Service
 public class MultiThread extends Thread {
 
-    @Autowired
-    SessiontransRepository sessiontransRepository;
+    public SessiontransRepository sessiontransRepository;
 
     private String phoneDest;
 
-  
-
-    public void test() {
-        Sessiontrans sessiontrans = new Sessiontrans();
-        
-       List<Sessiontrans> sessions=new ArrayList<>();
-        sessions=sessiontransRepository.findAll();
-        for (Sessiontrans object : sessions) {
-            System.out.println(object.getCodesecret());
-        }
+    public MultiThread(SessiontransRepository sessiontransRepository) {
+        this.sessiontransRepository = sessiontransRepository;
         
     }
-    
- @Override
-    public void run() {
-        long startTime = System.currentTimeMillis();
+
+    public void test() {
+        Sessiontrans essiontrans1 = sessiontransRepository.getOne(19);
+        System.out.println(essiontrans1.getMontant());
+    }
+
+    public String returnStatus(int id) {
+        Sessiontrans sessiontrans1 = sessiontransRepository.getOne(id);
+
+        return sessiontrans1.getStatus();
+    }
+
+ 
+    public Sessiontrans initTraitement() {
         Sessiontrans sessiontrans = new Sessiontrans();
         sessiontrans = sessiontransRepository.findBySessiontrans(phoneDest);
-         List<Sessiontrans> sessions=new ArrayList<>();
+         System.out.println(sessiontrans.getMontant());
+        return sessiontrans;
+    }
+    
+    public void TimeOut(){
+        long startTime = System.currentTimeMillis();
+        Sessiontrans sessiontrans = initTraitement();
+       int id;
+        System.out.println(phoneDest + " thread");
+
+        System.out.println(sessiontrans.getMontant() + " thread");
+        String status;
         while ((System.currentTimeMillis() - startTime) < 65000) {
             try {
 
                 System.out.println(System.currentTimeMillis() - startTime);
                 Thread.sleep(3000);
-                sessiontrans=sessiontransRepository.getOne(sessiontrans.getId());
-                
+                System.out.println(sessiontrans.getId() + " thread");
+                status = returnStatus(19);
+
+                if (status.equals("2")) {
+                    break;
+                }
+
+                if (status.equals("-1")) {
+                    break;
+                }
+
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-                if(sessiontrans.getStatus().equals("2")){
-                    break;
-                }
-                
-                  if(sessiontrans.getStatus().equals("-1")){
-                    break;
-                }
-           
+
+//           
         }
         sessiontrans.setCodesecret("time out");
         sessiontrans.setStatus("0");
         sessiontransRepository.save(sessiontrans);
         System.out.println("Ok");
-        
-       
+
+    }
+
+    @Override
+    public void run() {
+       TimeOut();
     }
     
     
-    public void setphone(String phone){
-        phoneDest =phone;
+
+    public void setphone(String phone) {
+        phoneDest = phone;
     }
-    public void getphone(){
+
+    public void getphone() {
         System.out.println(phoneDest);
     }
 }

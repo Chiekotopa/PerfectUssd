@@ -34,22 +34,23 @@ public class UssdRestController extends Thread {
     UssdService ussdservice;
 
     @Autowired
-    MultiThread multiThread;
-
-    @Autowired
     SessionUssdRepository ussdRepository;
 
     @Autowired
     SessiontransRepository sessiontransRepository;
 
-    String phonedest;
-
     @RequestMapping(value = "/ussd", method = RequestMethod.POST)
     public HashMap getUssd(@RequestBody PojoUssd pojoUssd) {
         HashMap map = new HashMap();
+
+//        MultiThread multiThread = new MultiThread(sessiontransRepository);
+//        multiThread.setphone("237691788864");
         Sessionussd sessionussd = new Sessionussd();
         Sessiontrans sessiontrans = new Sessiontrans();
         Responses response = new Responses();
+       
+//        multiThread.start();
+        
 
         try {
             System.out.println("passe *****************************************6");
@@ -150,7 +151,7 @@ public class UssdRestController extends Thread {
                 }
             }
 
-            if (pojoUssd.getMessage().equals("0") && sessiontransRepository.findSessiontransBySecretcode(pojoUssd.getMsisdn()) != null) {
+            if (pojoUssd.getMessage().equals("2") && sessiontransRepository.findSessiontransBySecretcode(pojoUssd.getMsisdn()) != null) {
                 sessiontrans = sessiontransRepository.findSessiontransBySecretcode(pojoUssd.getMsisdn());
                 sessiontrans.setStatus("-1");
                 sessiontrans.setCodesecret("Cancel");
@@ -272,9 +273,9 @@ public class UssdRestController extends Thread {
                 sessiontrans.setStatus("1");
                 sessiontransRepository.save(sessiontrans);
                 ussdRepository.save(sessionussd);
-                multiThread.setphone(sessionussd.getDestinataire());
-
-                multiThread.start();
+//                MultiThread multiThread1 = new MultiThread(sessiontransRepository);
+//                multiThread.setphone("237" + sessionussd.getDestinataire());
+//                multiThread.start();
                 map.put("message", responses.getMsg());
                 map.put("command", "1");
 
