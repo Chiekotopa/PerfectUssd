@@ -45,8 +45,8 @@ public class Sessiontrans implements Serializable {
     private String status;
     @Column(name = "codesecret")
     private String codesecret;
-    @Column(name = "thread")
-    private String thread;
+    @Column(name = "tread")
+    private String tread;
 
     public Sessiontrans() {
     }
@@ -104,11 +104,11 @@ public class Sessiontrans implements Serializable {
     }
 
     public String getThread() {
-        return thread;
+        return tread;
     }
 
     public void setThread(String thread) {
-        this.thread = thread;
+        this.tread = thread;
     }
 
     @Override

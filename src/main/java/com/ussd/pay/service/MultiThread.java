@@ -23,7 +23,7 @@ public class MultiThread extends Thread {
     SessiontransRepository sessiontransRepository;
 
     private String phoneDest;
-     private String phoneExp;
+    private String phoneExp;
 
     public MultiThread(SessiontransRepository sessiontransRepository) {
         this.sessiontransRepository = sessiontransRepository;
@@ -31,32 +31,33 @@ public class MultiThread extends Thread {
 
     public void test() {
         Sessiontrans sessiontrans = new Sessiontrans();
-
+        Sessiontrans session = new Sessiontrans();
         List<Sessiontrans> sessions = new ArrayList<>();
         sessions = sessiontransRepository.findAll();
         for (Sessiontrans object : sessions) {
-            System.out.println(object.getCodesecret());
+            System.out.println(object.getMontant());
         }
+        session = sessiontransRepository.findListSessiontransBySecretcode(this.phoneDest, this.phoneExp);
+        System.out.println(this.phoneDest + "******************** dest");
+        System.out.println(this.phoneExp + "******************** Exp");
+        System.out.println(session.getStatus() + "********************");
 
     }
 
     @Override
     public void run() {
         long startTime = System.currentTimeMillis();
-        
-      
-      
-        
         System.out.println(phoneDest);
         while ((System.currentTimeMillis() - startTime) < 65000) {
             try {
                 System.out.println(System.currentTimeMillis() - startTime);
                 Thread.sleep(3000);
                 Sessiontrans sessions = new Sessiontrans();
-                sessions = sessiontransRepository.findListSessiontransBySecretcode(this.phoneDest,this.phoneExp);
-                 System.out.println(sessions.getStatus()+"********************");
-                   System.out.println(this.phoneDest+"******************** dest");
-                    System.out.println(this.phoneExp+"******************** Exp");
+                sessions = sessiontransRepository.findListSessiontransBySecretcode(this.phoneDest, this.phoneExp);
+                System.out.println(this.phoneDest + "******************** dest");
+                System.out.println(this.phoneExp + "******************** Exp");
+                System.out.println(sessions.getStatus() + "********************");
+
                 if (sessions.getStatus().equals("2")) {
                     sessions.setThread("0");
                     sessiontransRepository.save(sessions);
@@ -74,9 +75,10 @@ public class MultiThread extends Thread {
         }
         if ((System.currentTimeMillis() - startTime) >= 65000) {
             Sessiontrans sessions = new Sessiontrans();
-             sessions = sessiontransRepository.findListSessiontransBySecretcode(this.phoneDest,this.phoneExp);
+            sessions = sessiontransRepository.findListSessiontransBySecretcode(this.phoneDest, this.phoneExp);
             sessions.setCodesecret("time out");
             sessions.setStatus("0");
+            sessions.setThread("0");
             sessiontransRepository.save(sessions);
             System.out.println("Ok");
         }
@@ -84,11 +86,11 @@ public class MultiThread extends Thread {
     }
 
     public void setphone(String phone) {
-       this.phoneDest = phone;
+        this.phoneDest = phone;
     }
-    
+
     public void setphoneExp(String phone) {
-       this.phoneExp = phone;
+        this.phoneExp = phone;
     }
 
     public void getphone() {
