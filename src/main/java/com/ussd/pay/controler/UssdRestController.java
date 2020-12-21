@@ -48,7 +48,7 @@ public class UssdRestController {
 
 //        MultiThread multiThread = new MultiThread(sessiontransRepository);
 //        multiThread.setphone(pojoUssd.getMsisdn());
-//        multiThread.setphoneExp("237655755958");
+//        multiThread.setphoneExp("237675440124");
 //        multiThread.start();
         Sessionussd sessionussd = new Sessionussd();
         Sessiontrans sessiontrans = new Sessiontrans();
@@ -209,7 +209,81 @@ public class UssdRestController {
                 return map;
             }
 
-            //Debitez un compte PerfectPay
+            //Crediter le compte client------------------
+            if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*1") && sessionussd.getType().equals("1")) {
+                sessionussd.setLastsep("237*100*1*1");
+                sessionussd.setAccess("phone");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrez le numero de telephone~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+            
+             //checker le phone du destinataire
+               if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*1*1") && sessionussd.getType().equals("1") && sessionussd.getAccess().equals("phone")) {
+                Responses responses = new Responses();
+                responses = ussdservice.checkerCompteDestinataireClientUSSD(pojoUssd.getMsisdn(), pojoUssd.getMessage());
+                if (responses.getSucces() == -2) {
+                    map.put("message", responses.getMsg());
+                    map.put("command", "1");
+                    return map;
+                }
+                if (responses.getSucces() == -1) {
+                    map.put("message", responses.getMsg());
+                    map.put("command", "1");
+                    return map;
+                }
+                 if (responses.getSucces() == -3) {
+                    map.put("message", responses.getMsg());
+                    map.put("command", "1");
+                    return map;
+                }
+                sessionussd.setAccess("solde");
+                sessionussd.setDestinataire(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrez le montant~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+               
+                 //checker le montant
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*1*1") && sessionussd.getType().equals("1") && sessionussd.getAccess().equals("solde")) {
+                Responses responses = new Responses();
+                responses = ussdservice.VerificationCheckingDepotCllientUSSSD(pojoUssd.getMsisdn(), sessionussd.getDestinataire(), Double.parseDouble(pojoUssd.getMessage()));
+                if (responses.getSucces() == -5) {
+                    map.put("message", responses.getMsg());
+                    map.put("command", "1");
+                    return map;
+                }
+                sessionussd.setAccess("securite");
+                sessionussd.setMontant(Double.parseDouble(pojoUssd.getMessage()));
+                ussdRepository.save(sessionussd);
+                map.put("message", responses.getMsg());
+                map.put("command", "1");
+                return map;
+            }
+            
+             //Validation de la transaction
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*1*1") && sessionussd.getType().equals("1") && sessionussd.getAccess().equals("securite")) {
+                Responses responses = new Responses();
+                sessiontrans = new Sessiontrans();
+                responses = ussdservice.validationDepotComptePerfectPayClientUSSD(pojoUssd.getMsisdn(), sessionussd.getDestinataire(), sessionussd.getMontant(), pojoUssd.getMessage());
+                if (responses.getSucces() == -6) {
+                    map.put("message", responses.getMsg());
+                    map.put("command", "1");
+                    return map;
+                }
+                sessionussd.setAccess("validation");
+                ussdRepository.save(sessionussd);
+                map.put("message", responses.getMsg());
+                map.put("command", "1");
+
+                return map;
+            }
+
+
+
+            //Debitez le compte d'un client---------------------------
             if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*2") && sessionussd.getType().equals("1")) {
                 sessionussd.setLastsep("237*100*2*1");
                 sessionussd.setAccess("phone");
@@ -273,6 +347,7 @@ public class UssdRestController {
                 sessiontrans.setPhoneagent(pojoUssd.getMsisdn());
                 sessiontrans.setPhonedestinataire("237" + sessionussd.getDestinataire());
                 sessiontrans.setStatus("1");
+                sessiontrans.setThread("1");
                 sessiontransRepository.save(sessiontrans);
                 ussdRepository.save(sessionussd);
                 MultiThread multiThread = new MultiThread(sessiontransRepository);
