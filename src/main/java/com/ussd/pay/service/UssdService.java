@@ -446,9 +446,7 @@ public class UssdService extends Thread {
         return response;
     }
         
-    
-   
-
+  
     public String replaceChaine(String chaine) {
 
         String originalstring = chaine;
