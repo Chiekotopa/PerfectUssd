@@ -210,6 +210,14 @@ public class UssdRestController {
                 return map;
             }
             
+             if (pojoUssd.getMessage().equals("3") && sessionussd.getLastsep().equals("237*100") && sessionussd.getType().equals("1")) {
+                sessionussd.setLastsep("237*100*3");
+                ussdRepository.save(sessionussd);
+                map.put("message", "1.Consulter le solde~2.Historique des transactions~3.Modifier le code ping~4.Commissions~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+            
             //Crediter le compte agent----------------------------------------------
              if (pojoUssd.getMessage().equals("2") && sessionussd.getLastsep().equals("237*100*1") && sessionussd.getType().equals("1")) {
                 sessionussd.setLastsep("237*100*1*2");
