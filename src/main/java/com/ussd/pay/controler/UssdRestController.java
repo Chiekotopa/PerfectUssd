@@ -46,18 +46,16 @@ public class UssdRestController {
     public HashMap getUssd(@RequestBody PojoUssd pojoUssd) {
         HashMap map = new HashMap();
 
-//        MultiThread multiThread = new MultiThread(sessiontransRepository);
-//        multiThread.setphone(pojoUssd.getMsisdn());
-//        multiThread.setphoneExp("237675440124");
-//        multiThread.start();
+        
         Sessionussd sessionussd = new Sessionussd();
         Sessiontrans sessiontrans = new Sessiontrans();
         Responses response = new Responses();
 
+      
         try {
             System.out.println("passe *****************************************6");
             if (ussdRepository.findApiBySessionId(pojoUssd.getSessionid()) == null) {
-
+  
                 if (pojoUssd.getMessage().equals("237*100")) {
                     System.out.println("passe *****************************************5");
                     if (sessiontransRepository.findBySessiontrans(pojoUssd.getMsisdn()) != null) {
@@ -81,7 +79,7 @@ public class UssdRestController {
 
                         map.put("message", response.getMsg());
                         map.put("command", "1");
-                        sessiontrans.setStatus(null);
+                        sessiontrans.setStatus("5");
                         sessiontrans.setCodesecret("wait");
                         sessiontransRepository.save(sessiontrans);
                         return map;
@@ -175,14 +173,20 @@ public class UssdRestController {
                 System.out.println(response.getSucces());
 
                 if (response.getSucces() == -6) {
-                    map.put("message", "0.Annuler ");
+                    map.put("message",response.getMsg()+"0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                
+                 if (response.getSucces() == -1) {
+                    map.put("message",response.getMsg()+"0.Annuler  ");
                     map.put("command", "1");
                     return map;
                 }
                 if (response.getSucces() == 1) {
                     System.out.println("passe *****************************************12");
                     sessiontrans.setStatus("2");
-                    
+                    sessiontrans.setThread("0");
                     sessiontrans.setCodesecret("OK");
                     sessiontransRepository.save(sessiontrans);
                     map.put("message", response.getMsg());

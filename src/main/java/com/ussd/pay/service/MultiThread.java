@@ -53,7 +53,11 @@ public class MultiThread extends Thread {
                 System.out.println(System.currentTimeMillis() - startTime);
                 Thread.sleep(3000);
                 Sessiontrans sessions = new Sessiontrans();
-                sessions = sessiontransRepository.findListSessiontransBySecretcode(this.phoneDest, this.phoneExp);
+                if(sessiontransRepository.findListSessiontransBySecretcode(this.phoneDest, this.phoneExp)==null){
+           
+                    break;
+                }else{
+                    sessions = sessiontransRepository.findListSessiontransBySecretcode(this.phoneDest, this.phoneExp);
                 System.out.println(this.phoneDest + "******************** dest");
                 System.out.println(this.phoneExp + "******************** Exp");
                 System.out.println(sessions.getStatus() + "********************");
@@ -69,7 +73,10 @@ public class MultiThread extends Thread {
                      sessions.setStatus("-1");
                     sessiontransRepository.save(sessions);
                     break;
+              
+                }  
                 }
+       
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
