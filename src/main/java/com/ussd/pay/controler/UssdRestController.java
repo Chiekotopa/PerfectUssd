@@ -96,7 +96,7 @@ public class UssdRestController {
                         sessionussd.setLastsep("237*100");
                         sessionussd.setType("1");
                         ussdRepository.save(sessionussd);
-                        map.put("message", "Bienvenue sur PerfectPay~1.Crediter un compte~2.Debiter un compte~3.Mon compte~4.~5.Recharger Carte UBA~0.Annuler  ");
+                        map.put("message", "Bienvenue sur PerfectPay~1.Crediter un compte~2.Debiter un compte~3.Mon compte~4.Recharger Carte UBA~0.Annuler  ");
                         map.put("command", "1");
                         return map;
                     }
@@ -1728,7 +1728,7 @@ public class UssdRestController {
 
                 sessionussd.setLastsep(sessionussd.getMessage() + "*4");
                 ussdRepository.save(sessionussd);
-                map.put("message", "Services Tierces~1.Payez un abonnement GEDOMED~2.Payez une licence IPLANS ERP~3.Payer Cotisation ONMC~4.Payer Frais etude de dossier ONMC~5.Payer Frais de siege ONMC~6.Payer Facture ENEO~7.Payer Facture CAMWATER~0.Retour ");
+                map.put("message", "Services Tiers~1.Payez un abonnement GEDOMED~2.Payez une licence IPLANS ERP~3.Payer Cotisation ONMC~4.Payer Frais etude de dossier ONMC~5.Payer Frais de siege ONMC~6.Payer Facture ENEO~7.Payer Facture CAMWATER~0.Retour ");
                 map.put("command", "1");
                 return map;
             }
