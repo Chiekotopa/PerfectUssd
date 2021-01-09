@@ -67,6 +67,7 @@ public class UssdRestController {
 
                         if (response.getSucces() == -1) {
                             map.put("message", response.getMsg());
+                              System.out.println(response.getSucces());
                             map.put("command", "1");
                             return map;
                         }
@@ -74,6 +75,7 @@ public class UssdRestController {
                         if (response.getSucces() == -2) {
                             map.put("message", response.getMsg());
                             map.put("command", "1");
+                            System.out.println(response.getSucces());
                             return map;
                         }
 
@@ -180,6 +182,7 @@ public class UssdRestController {
                 if (response.getSucces() == 1) {
                     System.out.println("passe *****************************************12");
                     sessiontrans.setStatus("2");
+                    
                     sessiontrans.setCodesecret("OK");
                     sessiontransRepository.save(sessiontrans);
                     map.put("message", response.getMsg());
@@ -267,6 +270,7 @@ public class UssdRestController {
                 }
 
                 map.put("message", response.getMsg() + "~0.Retour ");
+                map.put("command", "0");
                 return map;
             }
             

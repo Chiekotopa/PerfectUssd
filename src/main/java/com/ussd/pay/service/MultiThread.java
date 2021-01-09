@@ -60,7 +60,7 @@ public class MultiThread extends Thread {
 
                 if (sessions.getStatus().equals("2")) {
                     sessions.setThread("0");
-                     sessions.setStatus("2");
+                    sessions.setStatus("2");
                     sessiontransRepository.save(sessions);
                     break;
                 }
