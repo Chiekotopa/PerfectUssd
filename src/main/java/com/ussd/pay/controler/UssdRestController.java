@@ -208,6 +208,33 @@ public class UssdRestController {
                 return map;
             }
              
+             //Commissions journaliere call box------------------------------------------------------  
+             if (pojoUssd.getMessage().equals("4") && sessionussd.getLastsep().equals("237*100*3") && sessionussd.getType().equals("4")) {
+
+                System.out.println(sessionussd.getLastsep());
+                sessionussd.setLastsep("237*100*3*4");
+                ussdRepository.save(sessionussd);
+
+                map.put("message", "Entrer votre code secret~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+             
+             
+              //checker le code secret et affichage des commissions call box
+            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100*3*4") && sessionussd.getType().equals("4")) {
+                response = new Responses();
+                response = ussdservice.View_comissions_revendeurs_journaliere(pojoUssd.getMsisdn(), pojoUssd.getMessage());
+                if (response.getSucces() == -1) {
+                    map.put("message", response.getMsg());
+                    map.put("command", "1");
+                    return map;
+                }
+
+                map.put("message", response.getMsg());
+                map.put("command", "0");
+                return map;
+            }
               
              //Consulter le solde call box------------------------------------------------------                     
             if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*3") && sessionussd.getType().equals("4")) {
@@ -220,6 +247,8 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
+            
+            
 
             //checker le code secret
             if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100*3*1") && sessionussd.getType().equals("4")) {
@@ -542,6 +571,34 @@ public class UssdRestController {
                 ussdRepository.save(sessionussd);
                 map.put("message", "1.Consulter le solde~2.Historique des transactions~3.Modifier le code ping~4.Commissions journaliere~0.Annuler ");
                 map.put("command", "1");
+                return map;
+            }
+             
+              //Commissions journaliere revendeur------------------------------------------------------  
+             if (pojoUssd.getMessage().equals("4") && sessionussd.getLastsep().equals("237*100*3") && sessionussd.getType().equals("1")) {
+
+                System.out.println(sessionussd.getLastsep());
+                sessionussd.setLastsep("237*100*3*4");
+                ussdRepository.save(sessionussd);
+
+                map.put("message", "Entrer votre code secret~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+             
+             
+              //checker le code secret et affichage des commissions revendeur
+            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100*3*4") && sessionussd.getType().equals("1")) {
+                response = new Responses();
+                response = ussdservice.View_comissions_revendeurs_journaliere(pojoUssd.getMsisdn(), pojoUssd.getMessage());
+                if (response.getSucces() == -1) {
+                    map.put("message", response.getMsg());
+                    map.put("command", "1");
+                    return map;
+                }
+
+                map.put("message", response.getMsg());
+                map.put("command", "0");
                 return map;
             }
              

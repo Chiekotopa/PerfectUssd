@@ -480,6 +480,20 @@ public class UssdService extends Thread {
 
         return response;
     }
+     
+     
+      public Responses View_comissions_revendeurs_journaliere(String phone, String secretCode) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "http://192.168.40.113/apipayment/api-perfectpay.php?action=View_comissions_revendeurs_journaliere&CodeClient="+phone+"&secret_code="+secretCode+"";
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
 
     public String replaceChaine(String chaine) {
 
