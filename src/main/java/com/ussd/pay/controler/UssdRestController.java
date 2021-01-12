@@ -159,7 +159,7 @@ public class UssdRestController {
                 sessiontrans.setCodesecret("Cancel");
                 sessiontransRepository.save(sessiontrans);
                 map.put("message", "Operation annuler");
-                map.put("command", "1");
+                map.put("command", "0");
                 return map;
             }
             //retrait d'argent du client ---------------
@@ -302,7 +302,7 @@ public class UssdRestController {
                     return map;
                 }
 
-                map.put("message", response.getMsg() + "~0.Retour ");
+                map.put("message", response.getMsg());
                 map.put("command", "0");
                 return map;
             }
@@ -668,8 +668,8 @@ public class UssdRestController {
                     return map;
                 }
 
-                map.put("message", response.getMsg() + "~0.Retour ");
-                map.put("command", "1");
+                map.put("message", response.getMsg());
+                map.put("command", "0");
                 return map;
             }
             
@@ -1030,7 +1030,8 @@ public class UssdRestController {
             }
 
             //Creation de compte ***************************************************************************************************************************************                 
-            //retour
+            
+                //retour au menu
             if (pojoUssd.getMessage().equals("0") && !sessionussd.getAccess().equals("1") && sessionussd.getType().equals("-1")) {
                 sessionussd.setAccess("0");
                 ussdRepository.save(sessionussd);
@@ -1274,7 +1275,7 @@ public class UssdRestController {
                 return map;
             }
 
-            //Si c'est un transfert d'un compte perfectpay à un compte perfectpay
+            //Si c'est un transfert d'un compte perfectpay à un compte perfectpay------------------------------------------------------
             if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*1") && sessionussd.getType().equals("2")) {
 
                 System.out.println(sessionussd.getLastsep());
@@ -1299,7 +1300,7 @@ public class UssdRestController {
                     sessionussd.setCodesecret("OK");
                     ussdRepository.save(sessionussd);
                     map.put("message", response.getMsg());
-                    map.put("command", "1");
+                    map.put("command", "0");
                     return map;
                 }
                 if (response.getSucces() == -10) {
@@ -1329,7 +1330,7 @@ public class UssdRestController {
 
                 System.out.println(sessionussd.getMontant());
                 map.put("message",  response.getMsg());
-                map.put("command", "1");
+                map.put("command", "0");
                 return map;
 
             }
@@ -1605,11 +1606,11 @@ public class UssdRestController {
                 ussdRepository.save(sessionussd);
 
                 map.put("message", response.getMsg() + "~0.Retour ");
-                map.put("command", "1");
+                map.put("command", "0");
                 return map;
             }
 
-            //pour checker le code secret2
+            //pour checker le code secret pour consulter sont code secret
             if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100*2*2") && sessionussd.getCodemarchant() != null && sessionussd.getType().equals("2")) {
                 response = new Responses();
                 response = ussdservice.checkerCodeSecret2(sessionussd.getCodemarchant(), pojoUssd.getMsisdn(), pojoUssd.getMessage());
@@ -1629,8 +1630,8 @@ public class UssdRestController {
                     return map;
                 }
 
-                map.put("message", response.getMsg() + "~0.Retour ");
-                map.put("command", "1");
+                map.put("message", response.getMsg());
+                map.put("command", "0");
                 return map;
             }
 
@@ -1941,8 +1942,8 @@ public class UssdRestController {
                     return map;
                 }
 
-                map.put("message", response.getMsg() + "~0.Retour ");
-                map.put("command", "1");
+                map.put("message", response.getMsg());
+                map.put("command", "0");
                 return map;
             }
 
@@ -1976,7 +1977,6 @@ public class UssdRestController {
 
                 map.put("message", "Entrer votre code secret~0.Retour ");
                 map.put("command", "1");
-                map.put("command", "1");
 
                 return map;
             }
@@ -2001,8 +2001,8 @@ public class UssdRestController {
                     return map;
                 }
 
-                map.put("message", response.getMsg() + "~0.Retour ");
-                map.put("command", "1");
+                map.put("message", response.getMsg());
+                map.put("command", "0");
                 return map;
             }
             
