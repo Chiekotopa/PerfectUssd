@@ -1416,9 +1416,9 @@ public class UssdRestController {
 
                 sessionussd.setLastsep("237*100*1*2");
                 ussdRepository.save(sessionussd);
-
-                map.put("message", "Transfert d'argent Vers un client Mtn Money~Entrer le numero du destinataire~0.Retour ");
-                map.put("command", "1");
+//Transfert d'argent Vers un client Mtn Money~Entrer le numero du destinataire~0.Retour//
+                map.put("message", "Service momentanement indisponible ");
+                map.put("command", "0");
                 return map;
             }
 
@@ -1427,9 +1427,9 @@ public class UssdRestController {
 
                 sessionussd.setLastsep("237*100*1*3");
                 ussdRepository.save(sessionussd);
-
-                map.put("message", "Transfert d'argent Vers un client Orange Money~Entrer le numero du destinataire~0.Retour ");
-                map.put("command", "1");
+//Transfert d'argent Vers un client Orange Money~Entrer le numero du destinataire~0.Retour//
+                map.put("message", "Service momentanement indisponible ");
+                map.put("command", "0");
                 return map;
             }
 
@@ -1438,8 +1438,8 @@ public class UssdRestController {
 
                 sessionussd.setLastsep("237*100*1*4");
                 ussdRepository.save(sessionussd);
-
-                map.put("message", "Transfert d'argent Vers un client EU Mobil Money~Entrer le numero du destinataire~0.Retour ");
+            //Transfert d'argent Vers un client EU Mobil Money~Entrer le numero du destinataire~0.Retour//        
+                map.put("message", "Service momentanement indisponible ");
                 map.put("command", "1");
                 return map;
             }
@@ -1449,9 +1449,9 @@ public class UssdRestController {
 
                 sessionussd.setLastsep("237*100*1*5");
                 ussdRepository.save(sessionussd);
-
-                map.put("message", "Transfert d'argent Vers un client Yup~Entrer le numero du destinataire~0.Retour ");
-                map.put("command", "1");
+                //Transfert d'argent Vers un client Yup~Entrer le numero du destinataire~0.Retour//
+                map.put("message", "Service momentanement indisponible ");
+                map.put("command", "0");
                 return map;
             }
 
@@ -2023,9 +2023,9 @@ public class UssdRestController {
                 System.out.println(sessionussd.getLastsep());
                 sessionussd.setLastsep("237*100*5*4");
                 ussdRepository.save(sessionussd);
-
-                map.put("message", "Choix de la langue~1.Français~2.Englais~0.Retour ");
-                map.put("command", "1");
+              //  Choix de la langue~1.Français~2.Englais~0.Retour//
+                map.put("message", "Service momentanement indisponible ");
+                map.put("command", "0");
                 return map;
             }
             //pour retourner au menu principal étant sur le menu service tierce
@@ -2076,7 +2076,7 @@ public class UssdRestController {
             }
             if (pojoUssd.getMessage()
                     .equals("0")) {
-                map.put("message", "Operation annulee! ");
+                map.put("message", "Operation annulee!");
                 map.put("command", "0");
                 return map;
             }
