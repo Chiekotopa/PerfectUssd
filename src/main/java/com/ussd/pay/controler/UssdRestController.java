@@ -1328,7 +1328,7 @@ public class UssdRestController {
                 }
 
                 System.out.println(sessionussd.getMontant());
-                map.put("message", "probleme de function");
+                map.put("message",  response.getMsg());
                 map.put("command", "1");
                 return map;
 
@@ -2083,6 +2083,9 @@ public class UssdRestController {
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
+             map.put("message", "Systeme momentanement insdisponible");
+             map.put("command", "0");
+             return map;
         }
 
         return map;
