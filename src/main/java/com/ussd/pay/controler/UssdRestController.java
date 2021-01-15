@@ -1429,7 +1429,7 @@ public class UssdRestController {
                 sessionussd.setLastsep("237*100*1*3");
                 ussdRepository.save(sessionussd);
 //Transfert d'argent Vers un client Orange Money~Entrer le numero du destinataire~0.Retour//
-                map.put("message", "Service momentanement indisponible ");
+                map.put("message", "Service momentanement indisponible~0.Retour ");
                 map.put("command", "0");
                 return map;
             }
@@ -1440,7 +1440,7 @@ public class UssdRestController {
                 sessionussd.setLastsep("237*100*1*4");
                 ussdRepository.save(sessionussd);
             //Transfert d'argent Vers un client EU Mobil Money~Entrer le numero du destinataire~0.Retour//        
-                map.put("message", "Service momentanement indisponible ");
+                map.put("message", "Service momentanement indisponible~0.Retour ");
                 map.put("command", "1");
                 return map;
             }
@@ -1451,7 +1451,7 @@ public class UssdRestController {
                 sessionussd.setLastsep("237*100*1*5");
                 ussdRepository.save(sessionussd);
                 //Transfert d'argent Vers un client Yup~Entrer le numero du destinataire~0.Retour//
-                map.put("message", "Service momentanement indisponible ");
+                map.put("message", "Service momentanement indisponible~0.Retour ");
                 map.put("command", "0");
                 return map;
             }
@@ -2079,11 +2079,14 @@ public class UssdRestController {
                 map.put("message", "Operation annulee!");
                 map.put("command", "0");
                 return map;
+            } 
+            else{
+                map.put("message", "Service momentanement insdisponible~0.Retour");
+             map.put("command", "0"); 
             }
-
         } catch (Exception e) {
             System.out.println(e.getMessage());
-             map.put("message", "Systeme momentanement insdisponible");
+             map.put("message", "Service momentanement insdisponible");
              map.put("command", "0");
              return map;
         }
