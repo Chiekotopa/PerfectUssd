@@ -1042,7 +1042,7 @@ public class UssdRestController {
             }
             
             
-            if (pojoUssd.getMessage().equals("1") && sessionussd.getAccess().equals("1") && sessionussd.getType().equals("-1")) {
+            if (pojoUssd.getMessage().equals("1") && sessionussd.getAccess().equals("1") && sessionussd.getType().equals("-1")&& pojoUssd.getProvider().equals("mtn")) {
                 sessionussd.setAccess("nom");
                 ussdRepository.save(sessionussd);
                 map.put("message", "Entrez le nom~0.Annuler ");
@@ -1050,7 +1050,7 @@ public class UssdRestController {
                 return map;
             }
             //Save nom 
-            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("nom") && sessionussd.getType().equals("-1")) {
+            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("nom") && sessionussd.getType().equals("-1")&& pojoUssd.getProvider().equals("mtn")) {
 
                 sessionussd.setNom(ussdservice.replaceChaine(pojoUssd.getMessage()));
                 sessionussd.setAccess("prenom");
@@ -1061,7 +1061,7 @@ public class UssdRestController {
             }
 
             //Save prenom
-            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("prenom") && sessionussd.getType().equals("-1")) {
+            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("prenom") && sessionussd.getType().equals("-1")&& pojoUssd.getProvider().equals("mtn")) {
 
                 sessionussd.setPrenom(ussdservice.replaceChaine(pojoUssd.getMessage()));
                 sessionussd.setAccess("CNI");
@@ -1072,7 +1072,7 @@ public class UssdRestController {
             }
 
             //Save CNI
-            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("CNI") && sessionussd.getType().equals("-1")) {
+            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("CNI") && sessionussd.getType().equals("-1")&& pojoUssd.getProvider().equals("mtn")) {
 
                 response = new Responses();
                 response = ussdservice.CheckCni(pojoUssd.getMessage());
@@ -1097,7 +1097,7 @@ public class UssdRestController {
             }
 
             //Save Sexe
-            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("Sexe") && sessionussd.getType().equals("-1")) {
+            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("Sexe") && sessionussd.getType().equals("-1")&& pojoUssd.getProvider().equals("mtn")) {
 
                 response = new Responses();
                 response = ussdservice.CheckSexe(pojoUssd.getMessage());
@@ -1122,7 +1122,7 @@ public class UssdRestController {
             }
 
             //Save Date
-            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("Naissance") && sessionussd.getType().equals("-1")) {
+            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("Naissance") && sessionussd.getType().equals("-1")&& pojoUssd.getProvider().equals("mtn")) {
 
                 response = new Responses();
                 response = ussdservice.CheckDate(pojoUssd.getMessage());
@@ -1147,7 +1147,7 @@ public class UssdRestController {
             }
 
             //Save lieu lieu de naissance
-            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("Lieu") && sessionussd.getType().equals("-1")) {
+            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("Lieu") && sessionussd.getType().equals("-1")&& pojoUssd.getProvider().equals("mtn")) {
 
                 sessionussd.setAccess("Contribuable");
                 sessionussd.setLieunaissance(ussdservice.replaceChaine(pojoUssd.getMessage()));
@@ -1158,7 +1158,7 @@ public class UssdRestController {
             }
 
             //Save Contribuable 
-            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("Contribuable") && sessionussd.getType().equals("-1")) {
+            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("Contribuable") && sessionussd.getType().equals("-1")&& pojoUssd.getProvider().equals("mtn")) {
                 response = new Responses();
                 response = ussdservice.CheckContribuable(pojoUssd.getMessage());
 
@@ -1182,7 +1182,7 @@ public class UssdRestController {
             }
 
             //Save Email       
-            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("email") && sessionussd.getType().equals("-1")) {
+            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("email") && sessionussd.getType().equals("-1")&& pojoUssd.getProvider().equals("mtn")) {
                 System.out.println(pojoUssd.getMessage());
                 System.out.println(ussdservice.replaceChaine2(pojoUssd.getMessage()));
                 response = new Responses();
@@ -1208,7 +1208,7 @@ public class UssdRestController {
             }
 
             //Save code secret
-            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("secret") && sessionussd.getType().equals("-1")) {
+            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("secret") && sessionussd.getType().equals("-1")&& pojoUssd.getProvider().equals("mtn")) {
 
                 sessionussd.setAccess("confirmeCode");
                 sessionussd.setCodesecret(pojoUssd.getMessage());
@@ -1219,7 +1219,7 @@ public class UssdRestController {
             }
 
             //Save confirmation du code secret
-            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("confirmeCode") && sessionussd.getType().equals("-1")) {
+            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getAccess().equals("confirmeCode") && sessionussd.getType().equals("-1")&& pojoUssd.getProvider().equals("mtn")) {
                 response = new Responses();
                 response = ussdservice.ConfirmCodeSecret(sessionussd.getCodesecret(), pojoUssd.getMessage());
                 System.out.println(response.getSucces());
@@ -1543,7 +1543,7 @@ public class UssdRestController {
 
                 sessionussd.setLastsep(sessionussd.getMessage() + "*2");
                 ussdRepository.save(sessionussd);
-                map.put("message", "Paiement Marchand~1.Nouveau Paiement~2.Checker un code marchand~0.Retour");
+                map.put("message", "Paiement Marchand~1.Nouveau Paiement~2.Checker un code marchand~0.Retour ");
                 map.put("command", "1");
                 return map;
             }
@@ -1687,7 +1687,7 @@ public class UssdRestController {
                 sessionussd.setCodesecret(null);
                 ussdRepository.save(sessionussd);
 
-                map.put("message", "Paiement Marchand~1.Nouveau Paiement~2.Checker un code marchand~0.Retour");
+                map.put("message", "Paiement Marchand~1.Nouveau Paiement~2.Checker un code marchand~0.Retour ");
                 map.put("command", "1");
                 return map;
             }
@@ -1794,7 +1794,7 @@ public class UssdRestController {
 
                 sessionussd.setLastsep(sessionussd.getMessage() + "*4");
                 ussdRepository.save(sessionussd);
-                map.put("message", "Services Tiers~1.Payez un abonnement GEDOMED~2.Payez une licence IPLANS ERP~3.Payer Cotisation ONMC~4.Payer Frais etude de dossier ONMC~5.Payer Frais de siege ONMC~6.Payer Facture ENEO~7.Payer Facture CAMWATER~0.Retour ");
+                map.put("message", "Services Tiers~1.Payez un abonnement GEDOMED~2.Payez une licence IPLANS ERP~3.Payez Cotisation ONMC~4.Payez Frais etude de dossier ONMC~5.Payez Frais de siege ONMC~6.Payez Facture ENEO~7.Payez Facture CAMWATER~0.Retour ");
                 map.put("command", "1");
                 return map;
             }
@@ -2024,7 +2024,7 @@ public class UssdRestController {
                 sessionussd.setLastsep("237*100*5*4");
                 ussdRepository.save(sessionussd);
               //  Choix de la langue~1.Français~2.Englais~0.Retour//
-                map.put("message", "Service momentanement indisponible ");
+                map.put("message", "Service momentanement indisponible~0.Retour");
                 map.put("command", "0");
                 return map;
             }
@@ -2081,8 +2081,8 @@ public class UssdRestController {
                 return map;
             } 
             else{
-                map.put("message", "Service momentanement insdisponible~0.Retour");
-             map.put("command", "0"); 
+                map.put("message", "Service momentanement insdisponible~0.Retour ");
+                map.put("command", "0"); 
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
