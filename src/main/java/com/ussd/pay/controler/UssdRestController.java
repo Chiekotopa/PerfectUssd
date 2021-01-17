@@ -2086,7 +2086,7 @@ public class UssdRestController {
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-             map.put("message", "Service momentanement insdisponible");
+             map.put("message", "Connexion error");
              map.put("command", "0");
              return map;
         }
