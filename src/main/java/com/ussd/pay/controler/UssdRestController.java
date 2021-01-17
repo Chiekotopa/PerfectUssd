@@ -1035,7 +1035,7 @@ public class UssdRestController {
             if (pojoUssd.getMessage().equals("0") && !sessionussd.getAccess().equals("1") && sessionussd.getType().equals("-1")) {
                 sessionussd.setAccess("0");
                 ussdRepository.save(sessionussd);
-                map.put("message", "Bienvenue sur PerfectPay~1.Transfert d'argent~2.Paiement Marchand~3.Operations Bancaires~4.Services Tiers~5.Mon compte~0.Annuler  ");
+                map.put("message", "Bienvenue sur PerfectPay~1.Transfert d'argent~2.Paiement Marchand~3.Operations Bancaires~4.Services Tiers~5.Mon compte~0.Annuler ");
                 map.put("command", "1");
                 return map;
 
@@ -1506,7 +1506,7 @@ public class UssdRestController {
                 sessionussd.setLastsep("237*100*1");
                 ussdRepository.save(sessionussd);
 
-                map.put("message", "Transfert d'argent~1.Vers un client PerfectPay~2.Vers un client MTN~3.Vers un client Orange~4.Vers un client EU MobileMoney~5.Vers un client YUP~0.Retour  ");
+                map.put("message", "Transfert d'argent~1.Vers un client PerfectPay~2.Vers un client MTN~3.Vers un client Orange~4.Vers un client EU MobileMoney~5.Vers un client YUP~0.Retour ");
                 map.put("command", "1");
                 return map;
             }
@@ -1700,7 +1700,7 @@ public class UssdRestController {
                 sessionussd.setCodesecret(null);
                 ussdRepository.save(sessionussd);
 
-                map.put("message", "Paiement Marchand~1.Nouveau Paiement~2.Checker un code marchand~0.Retour");
+                map.put("message", "Paiement Marchand~1.Nouveau Paiement~2.Checker un code marchand~0.Retour ");
                 map.put("command", "1");
                 return map;
             }
@@ -1758,7 +1758,7 @@ public class UssdRestController {
                 sessionussd.setLastsep("237*100*3");
                 ussdRepository.save(sessionussd);
 
-                map.put("message", "Selectionner votre banque parmi nos banques partenaires~1.UBA~2.Afriland~3.Banque Atlantique~4.Ecobank~5.Societe Generale~0.Retour");
+                map.put("message", "Selectionner votre banque parmi nos banques partenaires~1.UBA~2.Afriland~3.Banque Atlantique~4.Ecobank~5.Societe Generale~0.Retour ");
                 map.put("command", "1");
                 return map;
             }
@@ -2024,7 +2024,7 @@ public class UssdRestController {
                 sessionussd.setLastsep("237*100*5*4");
                 ussdRepository.save(sessionussd);
               //  Choix de la langue~1.Français~2.Englais~0.Retour//
-                map.put("message", "Service momentanement indisponible~0.Retour");
+                map.put("message", "Service momentanement indisponible~0.Retour ");
                 map.put("command", "0");
                 return map;
             }
@@ -2082,7 +2082,9 @@ public class UssdRestController {
             } 
             else{
                 map.put("message", "Service momentanement insdisponible~0.Retour ");
-                map.put("command", "0"); 
+                map.put("command", "0");
+               
+               
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
