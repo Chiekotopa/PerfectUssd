@@ -63,13 +63,13 @@ public class MultiThread extends Thread {
                 System.out.println(sessions.getStatus() + "********************");
 
                 if (sessions.getStatus().equals("2")) {
-                    sessions.setThread("0");
+                    sessions.setTread("0");
                     sessions.setStatus("2");
                     sessiontransRepository.save(sessions);
                     break;
                 }
                 if (sessions.getStatus().equals("-1")) {
-                    sessions.setThread("0");
+                    sessions.setTread("0");
                      sessions.setStatus("-1");
                     sessiontransRepository.save(sessions);
                     break;
@@ -87,7 +87,7 @@ public class MultiThread extends Thread {
             sessions = sessiontransRepository.findListSessiontransBySecretcode(this.phoneDest, this.phoneExp);
             sessions.setCodesecret("time out");
             sessions.setStatus("0");
-            sessions.setThread("0");
+            sessions.setTread("0");
             sessiontransRepository.save(sessions);
             System.out.println("Ok");
         }

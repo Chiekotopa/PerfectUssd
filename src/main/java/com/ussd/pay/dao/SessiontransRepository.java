@@ -19,8 +19,11 @@ public interface SessiontransRepository extends JpaRepository<Sessiontrans, Inte
     @Query("SELECT ss FROM Sessiontrans ss WHERE ss.phonedestinataire=?1 AND ss.status='1'")
     public Sessiontrans findBySessiontrans(String teldest);
     
-     @Query("SELECT ss FROM Sessiontrans ss WHERE ss.phonedestinataire=?1 AND ss.codesecret='wait'")
+     @Query("SELECT ss FROM Sessiontrans ss WHERE ss.phonedestinataire=?1 AND ss.codesecret='wait' AND ss.type='0'")
     public Sessiontrans findSessiontransBySecretcode(String teldest);
+    
+     @Query("SELECT ss FROM Sessiontrans ss WHERE ss.phonedestinataire=?1 AND ss.codesecret='wait' AND ss.type='1'")
+    public Sessiontrans findSessiontransBySecretcode2(String teldest);
     
      
      @Query("SELECT ss FROM Sessiontrans ss WHERE ss.phonedestinataire=?1 AND ss.phoneagent=?2 AND ss.tread='1'")

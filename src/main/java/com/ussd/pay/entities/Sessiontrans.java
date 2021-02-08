@@ -6,6 +6,7 @@
 package com.ussd.pay.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -47,6 +50,17 @@ public class Sessiontrans implements Serializable {
     private String codesecret;
     @Column(name = "tread")
     private String tread;
+    @Column(name = "codeclient")
+    private String codeclient;
+    @Column(name = "codeapi")
+    private String codeapi;
+    @Column(name = "projet")
+    private String projet;
+    @Column(name = "date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
+    @Column(name = "type")
+    private String type;
 
     public Sessiontrans() {
     }
@@ -103,12 +117,52 @@ public class Sessiontrans implements Serializable {
         this.codesecret = codesecret;
     }
 
-    public String getThread() {
+    public String getTread() {
         return tread;
     }
 
-    public void setThread(String thread) {
-        this.tread = thread;
+    public void setTread(String tread) {
+        this.tread = tread;
+    }
+
+    public String getCodeclient() {
+        return codeclient;
+    }
+
+    public void setCodeclient(String codeclient) {
+        this.codeclient = codeclient;
+    }
+
+    public String getCodeapi() {
+        return codeapi;
+    }
+
+    public void setCodeapi(String codeapi) {
+        this.codeapi = codeapi;
+    }
+
+    public String getProjet() {
+        return projet;
+    }
+
+    public void setProjet(String projet) {
+        this.projet = projet;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override

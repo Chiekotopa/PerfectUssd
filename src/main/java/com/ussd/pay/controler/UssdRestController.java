@@ -13,6 +13,7 @@ import com.ussd.pay.pojo.PojoUssd;
 import com.ussd.pay.pojo.Responses;
 import com.ussd.pay.service.MultiThread;
 import com.ussd.pay.service.UssdService;
+import java.util.Date;
 import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -162,7 +163,8 @@ public class UssdRestController {
                 map.put("command", "0");
                 return map;
             }
-            //retrait d'argent du client ---------------
+            
+            //retrait d'argent du client  ---------------
             System.out.println("passe *****************************************1");
             if (sessiontransRepository.findSessiontransBySecretcode(pojoUssd.getMsisdn()) != null) {
                 System.out.println("passe *****************************************2");
@@ -186,15 +188,46 @@ public class UssdRestController {
                 if (response.getSucces() == 1) {
                     System.out.println("passe *****************************************12");
                     sessiontrans.setStatus("2");
-                    sessiontrans.setThread("0");
+                    sessiontrans.setTread("0");
                     sessiontrans.setCodesecret("OK");
                     sessiontransRepository.save(sessiontrans);
                     map.put("message", response.getMsg());
                     map.put("command", "0");
                     return map;
                 }
-
+                        
             }
+            
+            
+              //retrait d'argent du client par le marchand  ---------------
+            System.out.println("passe *****************************************1");
+            if (sessiontransRepository.findSessiontransBySecretcode2(pojoUssd.getMsisdn()) != null) {
+                System.out.println("passe *****************************************2");
+                sessiontrans = sessiontransRepository.findSessiontransBySecretcode2(pojoUssd.getMsisdn());
+                System.out.println("passe *****************************************10");
+                response = ussdservice.check_CodeSecret(pojoUssd.getMsisdn(), pojoUssd.getMessage());
+                System.out.println("passe *****************************************11");
+                System.out.println(response.getSucces());
+                
+             if (response.getSucces() == -1) {
+                    
+                    map.put("message",response.getMsg()+" ");
+                    map.put("command", "1");
+                    return map;
+              }
+                if (response.getSucces() == 1) {
+                    System.out.println("passe *****************************************12");
+                    ussdservice.create_transaction(sessiontrans);
+                    sessiontrans.setStatus("2");
+                    sessiontrans.setTread("0");
+                    sessiontrans.setCodesecret("OK");
+                    sessiontransRepository.save(sessiontrans);
+                    
+                    map.put("message","Paiement effectue avec succes " );
+                    map.put("command", "0");
+                    return map;
+              }
+            }   
 
             sessionussd = new Sessionussd();
             sessionussd = ussdRepository.findApiBySessionId(pojoUssd.getSessionid());
@@ -533,7 +566,9 @@ public class UssdRestController {
                 sessiontrans.setPhoneagent(pojoUssd.getMsisdn());
                 sessiontrans.setPhonedestinataire("237" + sessionussd.getDestinataire());
                 sessiontrans.setStatus("1");
-                sessiontrans.setThread("1");
+                sessiontrans.setTread("1");
+                sessiontrans.setType("0");
+                sessiontrans.setDate(new Date(System.currentTimeMillis()));
                 sessiontransRepository.save(sessiontrans);
                 ussdRepository.save(sessionussd);
                 MultiThread multiThread = new MultiThread(sessiontransRepository);
@@ -712,6 +747,7 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
+            
             //etape  pour confirmer le code secret
             if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100*3*3") && sessionussd.getCodesecret() != null && sessionussd.getNewcode() != null && sessionussd.getType().equals("1")) {
                 response = new Responses();
@@ -981,7 +1017,9 @@ public class UssdRestController {
                 sessiontrans.setPhoneagent(pojoUssd.getMsisdn());
                 sessiontrans.setPhonedestinataire("237" + sessionussd.getDestinataire());
                 sessiontrans.setStatus("1");
-                sessiontrans.setThread("1");
+                sessiontrans.setTread("1");
+                sessiontrans.setType("0");
+                sessiontrans.setDate(new Date(System.currentTimeMillis()));
                 sessiontransRepository.save(sessiontrans);
                 ussdRepository.save(sessionussd);
                 MultiThread multiThread = new MultiThread(sessiontransRepository);
