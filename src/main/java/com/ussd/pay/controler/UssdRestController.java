@@ -200,13 +200,13 @@ public class UssdRestController {
             
             
               //retrait d'argent du client par le marchand  ---------------
-            System.out.println("passe *****************************************1");
+            System.out.println("passe *****************************************21");
             if (sessiontransRepository.findSessiontransBySecretcode2(pojoUssd.getMsisdn()) != null) {
-                System.out.println("passe *****************************************2");
+                System.out.println("passe *****************************************22");
                 sessiontrans = sessiontransRepository.findSessiontransBySecretcode2(pojoUssd.getMsisdn());
-                System.out.println("passe *****************************************10");
+                System.out.println("passe *****************************************23");
                 response = ussdservice.check_CodeSecret(pojoUssd.getMsisdn(), pojoUssd.getMessage());
-                System.out.println("passe *****************************************11");
+                System.out.println("passe *****************************************24");
                 System.out.println(response.getSucces());
                 
              if (response.getSucces() == -1) {
@@ -216,7 +216,7 @@ public class UssdRestController {
                     return map;
               }
                 if (response.getSucces() == 1) {
-                    System.out.println("passe *****************************************12");
+                    System.out.println("passe *****************************************25");
                     ussdservice.create_transaction(sessiontrans);
                     sessiontrans.setStatus("2");
                     sessiontrans.setTread("0");
@@ -2126,7 +2126,7 @@ public class UssdRestController {
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-             map.put("message", "Connexion Error");
+             map.put("message", "Connexion Error ");
              map.put("command", "0");
              return map;
         }

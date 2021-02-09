@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import com.ussd.pay.entities.Sessionussd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 
 /**
  *
@@ -397,7 +398,7 @@ public class UssdService extends Thread {
         String boString = "";
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
-
+        sessiontrans.setPhonedestinataire(sessiontrans.getPhonedestinataire().substring(3));
         String url = "https://api.kakotel.com/api-perfectpay.php?action=create_transaction&CodeClient=" + sessiontrans.getCodeclient() + "&CodeAPI=" + sessiontrans.getCodeapi()
                 + "&Projet=" + sessiontrans.getProjet()
                 + "&Montant=" + sessiontrans.getMontant() + "&MoyenTransaction=PERFECTPAY&Telephone=" + sessiontrans.getPhonedestinataire() + "";
@@ -406,15 +407,15 @@ public class UssdService extends Thread {
     }
 
     public Responses checkerSiRetraitEnCours(String phoneDest) {
-        Responses response = new Responses();
+        Responses response = new Responses(); 
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
         String boString = "";
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
 
-        String url = "https://api.kakotel.com/api-perfectpay.php?action=checker_si_retrait_en_cours&Code_clientExpediteurint=" + phoneDest + "";
+        String url = "https://api.kakotel.com/api-perfectpay.php?action=checker_si_retrait_en_cours&Code_clientExpediteurint="+phoneDest+ "";
         response = restTemplate.getForObject(url, Responses.class, response);
-
+       
         return response;
     }
 
@@ -538,6 +539,17 @@ public class UssdService extends Thread {
         String originalstring = chaine;
         String replace1 = originalstring.replace('?', '@');
 
+        System.out.println(replace1);
+
+        return replace1;
+    }
+    
+     public String replaceChainePhone(String chaine) {
+
+        String originalstring = chaine;
+        String replace1 = originalstring.replace('%', ' ');
+        replace1 = replace1.replace('2', ' ');
+        replace1 = replace1.replace('0', ' ');
         System.out.println(replace1);
 
         return replace1;
