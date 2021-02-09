@@ -130,6 +130,21 @@ public class UssdRestController {
                         map.put("command", "1");
                         return map;
                     }
+                    
+                    if (response.getSucces() == 8) {
+                        sessionussd = new Sessionussd();
+                        sessionussd.setMessage(pojoUssd.getMessage());
+                        sessionussd.setMsisdn(pojoUssd.getMsisdn());
+                        sessionussd.setProvider(pojoUssd.getProvider());
+                        sessionussd.setSessionid(pojoUssd.getSessionid());
+                        sessionussd.setAccess("0");
+                        sessionussd.setLastsep("237*100");
+                        sessionussd.setType("8");
+                        ussdRepository.save(sessionussd);
+                        map.put("message", "Bienvenue sur PerfectPay~1.Mon compte~2.Encaissement~3.Service Tiers~0.Annuler ");
+                        map.put("command", "1");
+                        return map;
+                    }
 
                     if (response.getSucces() == -1) {
                         sessionussd = new Sessionussd();
@@ -231,6 +246,59 @@ public class UssdRestController {
 
             sessionussd = new Sessionussd();
             sessionussd = ussdRepository.findApiBySessionId(pojoUssd.getSessionid());
+            
+            
+            //Gestion du compte Marchand***************************************************************************************************************
+            if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100") && sessionussd.getType().equals("8")) {
+                sessionussd.setLastsep("237*100*1");
+                ussdRepository.save(sessionussd);
+                map.put("message", "1.Consulter le solde~2.Historique des transactions~3.Modifier le code secret~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+            
+            
+            if (pojoUssd.getMessage().equals("2") && sessionussd.getLastsep().equals("237*100") && sessionussd.getType().equals("8")) {
+                sessionussd.setLastsep("237*100*2");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Choisir le mode de paiement~1.PerfectPay~2.MTN Mobile Money~3.Orange Money~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+            
+             if (pojoUssd.getMessage().equals("3") && sessionussd.getLastsep().equals("237*100") && sessionussd.getType().equals("8")) {
+                sessionussd.setLastsep("237*100*3");
+                ussdRepository.save(sessionussd);
+                map.put("message", "1.Payer un abonnement CANALSAT~2.ENEO~3.CAMWATER~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+            //retour sous menu marchand------------------------------
+             if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*1") && sessionussd.getType().equals("8")) {
+                sessionussd.setLastsep("237*100");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Bienvenue sur PerfectPay~1.Mon compte~2.Encaissement~3.Service Tiers~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+              
+              if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*2") && sessionussd.getType().equals("8")) {
+                sessionussd.setLastsep("237*100");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Bienvenue sur PerfectPay~1.Mon compte~2.Encaissement~3.Service Tiers~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+              
+               if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*3") && sessionussd.getType().equals("8")) {
+                sessionussd.setLastsep("237*100");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Bienvenue sur PerfectPay~1.Mon compte~2.Encaissement~3.Service Tiers~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+             
+            
             
             //gestion du compte Call Box****************************************************************************************************************        
              if (pojoUssd.getMessage().equals("3") && sessionussd.getLastsep().equals("237*100") && sessionussd.getType().equals("4")) {
