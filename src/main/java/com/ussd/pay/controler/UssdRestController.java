@@ -97,7 +97,7 @@ public class UssdRestController {
                         sessionussd.setLastsep("237*100");
                         sessionussd.setType("1");
                         ussdRepository.save(sessionussd);
-                        map.put("message", "Bienvenue sur PerfectPay~1.Crediter un compte~2.Debiter un compte~3.Mon compte~4.Recharger Carte UBA~0.Annuler  ");
+                        map.put("message", "Bienvenue sur PerfectPay Revendeur~1.Crediter un compte~2.Debiter un compte~3.Mon compte~4.Recharger Carte UBA~0.Annuler  ");
                         map.put("command", "1");
                         return map;
                     }
@@ -112,7 +112,7 @@ public class UssdRestController {
                         sessionussd.setLastsep("237*100");
                         sessionussd.setType("2");
                         ussdRepository.save(sessionussd);
-                        map.put("message", "Bienvenue sur PerfectPay~1.Transfert d'argent~2.Paiement Marchand~3.Operations Bancaires~4.Services Tiers~5.Mon compte~0.Annuler ");
+                        map.put("message", "Bienvenue sur PerfectPay Client~1.Transfert d'argent~2.Paiement Marchand~3.Operations Bancaires~4.Services Tiers~5.Mon compte~0.Annuler ");
                         map.put("command", "1");
                         return map;
                     }
@@ -126,7 +126,7 @@ public class UssdRestController {
                         sessionussd.setLastsep("237*100");
                         sessionussd.setType("4");
                         ussdRepository.save(sessionussd);
-                        map.put("message", "Bienvenue sur PerfectPay~1.Crediter un compte PerpectPay~2.Debiter un compte PerfectPay~3.Mon compte~4.Destockage~5.Recharger Carte UBA~0.Annuler ");
+                        map.put("message", "Bienvenue sur PerfectPay Agent~1.Crediter un compte PerpectPay~2.Debiter un compte PerfectPay~3.Mon compte~4.Destockage~5.Recharger Carte UBA~0.Annuler ");
                         map.put("command", "1");
                         return map;
                     }
@@ -141,7 +141,7 @@ public class UssdRestController {
                         sessionussd.setLastsep("237*100");
                         sessionussd.setType("8");
                         ussdRepository.save(sessionussd);
-                        map.put("message", "Bienvenue sur PerfectPay~1.Mon compte~2.Encaissement~3.Service Tiers~0.Annuler ");
+                        map.put("message", "Bienvenue sur PerfectPay Marchand~1.Mon Compte~2.Encaissement~3.Service Tiers~0.Annuler ");
                         map.put("command", "1");
                         return map;
                     }
@@ -269,7 +269,7 @@ public class UssdRestController {
              if (pojoUssd.getMessage().equals("3") && sessionussd.getLastsep().equals("237*100") && sessionussd.getType().equals("8")) {
                 sessionussd.setLastsep("237*100*3");
                 ussdRepository.save(sessionussd);
-                map.put("message", "1.Payer un abonnement CANALSAT~2.ENEO~3.CAMWATER~0.Annuler ");
+                map.put("message", "1.Payer un abonnement CANALSAT~2.Payer votre facture ENEO~3.CAMWATER~0.Annuler ");
                 map.put("command", "1");
                 return map;
             }
@@ -277,7 +277,7 @@ public class UssdRestController {
              if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*1") && sessionussd.getType().equals("8")) {
                 sessionussd.setLastsep("237*100");
                 ussdRepository.save(sessionussd);
-                map.put("message", "Bienvenue sur PerfectPay~1.Mon compte~2.Encaissement~3.Service Tiers~0.Annuler ");
+                map.put("message", "Bienvenue sur PerfectPay Marchand~1.Mon Compte~2.Encaissement~3.Service Tiers~0.Annuler ");
                 map.put("command", "1");
                 return map;
             }
@@ -285,7 +285,7 @@ public class UssdRestController {
               if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*2") && sessionussd.getType().equals("8")) {
                 sessionussd.setLastsep("237*100");
                 ussdRepository.save(sessionussd);
-                map.put("message", "Bienvenue sur PerfectPay~1.Mon compte~2.Encaissement~3.Service Tiers~0.Annuler ");
+                map.put("message", "Bienvenue sur PerfectPay Marchand~1.Mon Compte~2.Encaissement~3.Service Tiers~0.Annuler ");
                 map.put("command", "1");
                 return map;
             }
@@ -293,7 +293,7 @@ public class UssdRestController {
                if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*3") && sessionussd.getType().equals("8")) {
                 sessionussd.setLastsep("237*100");
                 ussdRepository.save(sessionussd);
-                map.put("message", "Bienvenue sur PerfectPay~1.Mon compte~2.Encaissement~3.Service Tiers~0.Annuler ");
+                map.put("message", "Bienvenue sur PerfectPay Marchand~1.Mon Compte~2.Encaissements~3.Services Tiers~0.Annuler ");
                 map.put("command", "1");
                 return map;
             }
