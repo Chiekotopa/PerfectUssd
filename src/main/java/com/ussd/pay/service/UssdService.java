@@ -535,6 +535,48 @@ public class UssdService extends Thread {
 
         return response;
     }
+     
+      public Responses checker_CodePointVente(String codePointVente) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "https://api.kakotel.com/api-perfectpay.php?action=checker_CodePointVente&Code_PointVentePerfectPay="+codePointVente;
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
+      
+       public Responses checker_solde_Client_New_retrait(String amount,String codePointVente,String PhoneNumber) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "https://api.kakotel.com/api-perfectpay.php?action=checker_solde_Client_New_retrait&Code_PointVentePerfectPay="+codePointVente+"&Code_clientDestinataire="+PhoneNumber+"SaisirCode_clientDestinataire&Montant="+amount+"";
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
+       
+        public Responses validation_retrait_account_perfect_pay_NewMethode(String amount,String codePointVente,String phoneNumber,String secureCode) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "https://api.kakotel.com/api-perfectpay.php?action=validation_retrait_account_perfect_pay_NewMethode&Code_clientExpediteur="+phoneNumber+"&Code_PointVentePerfectPay="+codePointVente+"&Montant="+amount+"&CodeSecurite="+secureCode+"";
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
+     
+     
+     
 
     public String replaceChaine(String chaine) {
 
