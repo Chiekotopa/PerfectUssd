@@ -103,6 +103,7 @@ public class UssdRestController {
                         sessionussd.setAccess("0");
                         sessionussd.setLastsep("237*100");
                         sessionussd.setType("1");
+                        sessionussd.setDate(new Date(System.currentTimeMillis()));
                         ussdRepository.save(sessionussd);
                         map.put("message", "Bienvenue sur PerfectPay Revendeur~1.Crediter un compte~2.Debiter un compte~3.Mon compte~4.Recharger Carte UBA~0.Annuler  ");
                         map.put("command", "1");
@@ -118,6 +119,7 @@ public class UssdRestController {
                         sessionussd.setAccess("0");
                         sessionussd.setLastsep("237*100");
                         sessionussd.setType("2");
+                        sessionussd.setDate(new Date(System.currentTimeMillis()));
                         ussdRepository.save(sessionussd);
                         map.put("message", "Bienvenue sur PerfectPay Client~1.Transfert d'argent~2.Paiement Marchand~3.Operations Bancaires~4.Services Tiers~5.Mon compte~6.Retrait PerfectPay~0.Annuler ");
                         map.put("command", "1");
@@ -132,6 +134,7 @@ public class UssdRestController {
                         sessionussd.setAccess("0");
                         sessionussd.setLastsep("237*100");
                         sessionussd.setType("4");
+                        sessionussd.setDate(new Date(System.currentTimeMillis()));
                         ussdRepository.save(sessionussd);
                         map.put("message", "Bienvenue sur PerfectPay Agent~1.Crediter un compte PerpectPay~2.Debiter un compte PerfectPay~3.Mon compte~4.Destockage~5.Recharger Carte UBA~0.Annuler ");
                         map.put("command", "1");
@@ -147,6 +150,7 @@ public class UssdRestController {
                         sessionussd.setAccess("0");
                         sessionussd.setLastsep("237*100");
                         sessionussd.setType("8");
+                        sessionussd.setDate(new Date(System.currentTimeMillis()));
                         ussdRepository.save(sessionussd);
                         map.put("message", "Bienvenue sur PerfectPay Marchand~1.Mon Compte~2.Encaissement~3.Service Tiers~0.Annuler ");
                         map.put("command", "1");
@@ -2467,8 +2471,7 @@ public class UssdRestController {
                 return map;
             }
 
-            
-           //Etape Checker code du point de vente
+            //Etape Checker code du point de vente
             if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100*6") && sessionussd.getType().equals("2")) {
                 response = new Responses();
                 response = ussdservice.checker_CodePointVente(pojoUssd.getMessage());
@@ -2491,12 +2494,12 @@ public class UssdRestController {
                 }
 
             }
-            
+
             //Etape checker montant du client
-             if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100*6") && sessionussd.getType().equals("2")&& sessionussd.getMontant()==null){
+            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100*6") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
                 response = new Responses();
                 response = ussdservice.checker_solde_Client_New_retrait(pojoUssd.getMessage(), sessionussd.getCodemarchant(), pojoUssd.getMsisdn());
-                
+
                 if (response.getSucces() == -2) {
                     map.put("message", response.getMsg());
                     map.put("command", "1");
@@ -2511,12 +2514,12 @@ public class UssdRestController {
                 }
 
             }
-             
-             //Etape Checker le code Secret du client
-             if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100*6") && sessionussd.getType().equals("2")&& sessionussd.getCodesecret()==null){
+
+            //Etape Checker le code Secret du client pour finaliser le retrait d'argent au point de vente
+            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100*6") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
                 response = new Responses();
-                response = ussdservice.checker_solde_Client_New_retrait(pojoUssd.getMessage(), sessionussd.getCodemarchant(), pojoUssd.getMsisdn());
-                
+                response = ussdservice.validation_retrait_account_perfect_pay_NewMethode(sessionussd.getMontant().toString(), sessionussd.getCodemarchant(), pojoUssd.getMsisdn(), pojoUssd.getMessage());
+
                 if (response.getSucces() == -6) {
                     map.put("message", response.getMsg());
                     map.put("command", "1");
@@ -2531,7 +2534,7 @@ public class UssdRestController {
                 }
 
             }
-            
+
             //retour au sous menu mon compte PerfectPay
             if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*5*1") && sessionussd.getType().equals("2")) {
 

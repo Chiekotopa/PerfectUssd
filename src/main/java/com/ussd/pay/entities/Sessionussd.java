@@ -6,6 +6,7 @@
 package com.ussd.pay.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,17 +16,17 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Carlos TCHIOZEM
+ * @author chiek
  */
 @Entity
 @Table(name = "sessionussd")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Sessionussd.findAll", query = "SELECT s FROM Sessionussd s")})
+
 public class Sessionussd implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -75,6 +76,9 @@ public class Sessionussd implements Serializable {
     private String email;
     @Column(name = "type")
     private String type;
+    @Column(name = "date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
 
     public Sessionussd() {
     }
@@ -249,6 +253,14 @@ public class Sessionussd implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     @Override
