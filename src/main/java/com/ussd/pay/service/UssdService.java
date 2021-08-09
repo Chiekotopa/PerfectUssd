@@ -556,7 +556,7 @@ public class UssdService extends Thread {
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
 
-        String url = "https://api.kakotel.com/api-perfectpay.php?action=checker_solde_Client_New_retrait&Code_PointVentePerfectPay="+codePointVente+"&Code_clientDestinataire="+PhoneNumber+"SaisirCode_clientDestinataire&Montant="+amount+"";
+        String url = "https://api.kakotel.com/api-perfectpay.php?action=checker_solde_Client_New_retrait&Code_PointVentePerfectPay="+codePointVente+"&Code_clientDestinataire="+PhoneNumber+"&Montant="+amount+"";
         response = restTemplate.getForObject(url, Responses.class, response);
 
         return response;
