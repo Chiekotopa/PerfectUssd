@@ -574,6 +574,21 @@ public class UssdService extends Thread {
 
         return response;
     }
+        
+        public Responses Afficher_CodePointVente(String codePointVente) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "https://api.kakotel.com/api-perfectpay.php?action=Afficher_CodePointVente&Code_Client="+codePointVente;
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
+        
+        
      
      
      

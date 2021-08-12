@@ -105,7 +105,7 @@ public class UssdRestController {
                         sessionussd.setType("1");
                         sessionussd.setDate(new Date(System.currentTimeMillis()));
                         ussdRepository.save(sessionussd);
-                        map.put("message", "Bienvenue sur PerfectPay Revendeur~1.Crediter un compte~2.Debiter un compte~3.Mon compte~4.Recharger Carte UBA~0.Annuler  ");
+                        map.put("message", "Bienvenue sur PerfectPay Revendeur~1.Crediter un compte~2.Debiter un compte~3.Mon compte~4.Recharger Carte UBA~0.Annuler ");
                         map.put("command", "1");
                         return map;
                     }
@@ -121,7 +121,7 @@ public class UssdRestController {
                         sessionussd.setType("2");
                         sessionussd.setDate(new Date(System.currentTimeMillis()));
                         ussdRepository.save(sessionussd);
-                        map.put("message", "Bienvenue sur PerfectPay Client~1.Transfert d'argent~2.Paiement Marchand~3.Operations Bancaires~4.Services Tiers~5.Mon compte~6.Retrait PerfectPay~0.Annuler ");
+                        map.put("message", "Bienvenue sur PerfectPay Client~1.Transfert d'argent~2.Paiement Marchand~3.Operations Bancaires~4.Services Tiers~5.Mon Compte~6.Retrait Perfectpay~0.Annuler ");
                         map.put("command", "1");
                         return map;
                     }
@@ -539,11 +539,34 @@ public class UssdRestController {
                 return map;
             }
 
-            //gestion du compte Call Box****************************************************************************************************************        
+            //gestion du compte Call Box ou agent****************************************************************************************************************        
             if (pojoUssd.getMessage().equals("3") && sessionussd.getLastsep().equals("237*100") && sessionussd.getType().equals("4")) {
                 sessionussd.setLastsep("237*100*3");
                 ussdRepository.save(sessionussd);
-                map.put("message", "1.Consulter le solde~2.Historique des transactions~3.Modifier le code ping~4.Commissions journaliere~0.Annuler ");
+                map.put("message", "1.Consulter le solde~2.Historique des transactions~3.Modifier le code ping~4.Commissions journaliere~5.Consulter mon code point de vente~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+
+            //Consulter mon code point de vente---------------------------------------------------------------  
+            if (pojoUssd.getMessage().equals("5") && sessionussd.getLastsep().equals("237*100*3") && sessionussd.getType().equals("4")) {
+
+                System.out.println(sessionussd.getLastsep());
+                sessionussd.setLastsep("237*100*3*5");
+                ussdRepository.save(sessionussd);
+                response = new Responses();
+                response = ussdservice.Afficher_CodePointVente(pojoUssd.getMsisdn());
+                if (response.getSucces() == -1) {
+                    map.put("message", response.getMsg());
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == 1) {
+                    map.put("message", response.getMsg());
+                    map.put("command", "1");
+                    return map;
+                }
+                map.put("message", response.getMsg());
                 map.put("command", "1");
                 return map;
             }
@@ -916,7 +939,8 @@ public class UssdRestController {
                 return map;
             }
 
-            // gestion du compte revendeur ****************************************************************************************************************
+            // Gestions du compte revendeur ****************************************************************************************************************
+            // Sous menu Crediter le compte pour Reventdeur ...........................................................
             if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100") && sessionussd.getType().equals("1")) {
                 sessionussd.setLastsep("237*100*1");
                 ussdRepository.save(sessionussd);
@@ -924,7 +948,7 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
-
+            // Sous menu Debiter le compte pour Reventdeur ...........................................................
             if (pojoUssd.getMessage().equals("2") && sessionussd.getLastsep().equals("237*100") && sessionussd.getType().equals("1")) {
                 sessionussd.setLastsep("237*100*2");
                 ussdRepository.save(sessionussd);
@@ -933,22 +957,44 @@ public class UssdRestController {
                 return map;
             }
 
-            //Gestion de mon Compte pour le revendeur ...............................................................
+            // Sous Menu Gestion de mon Compte pour le revendeur ...............................................................
             if (pojoUssd.getMessage().equals("3") && sessionussd.getLastsep().equals("237*100") && sessionussd.getType().equals("1")) {
                 sessionussd.setLastsep("237*100*3");
                 ussdRepository.save(sessionussd);
-                map.put("message", "1.Consulter le solde~2.Historique des transactions~3.Modifier le code ping~4.Commissions journaliere~0.Annuler ");
+                map.put("message", "1.Consulter le solde~2.Historique des transactions~3.Modifier le code ping~4.Commissions journaliere~5.Consulter mon code point de vente~0.Annuler ");
                 map.put("command", "1");
                 return map;
             }
 
-            //Commissions journaliere revendeur------------------------------------------------------  
+            //Consulter mon code point de vente---------------------------------------------------------------  
+            if (pojoUssd.getMessage().equals("5") && sessionussd.getLastsep().equals("237*100*3") && sessionussd.getType().equals("1")) {
+
+                System.out.println(sessionussd.getLastsep());
+                sessionussd.setLastsep("237*100*3*5");
+                ussdRepository.save(sessionussd);
+                response = new Responses();
+                response = ussdservice.Afficher_CodePointVente(pojoUssd.getMsisdn());
+                if (response.getSucces() == -1) {
+                    map.put("message", response.getMsg());
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == 1) {
+                    map.put("message", response.getMsg());
+                    map.put("command", "1");
+                    return map;
+                }
+                map.put("message", response.getMsg());
+                map.put("command", "1");
+                return map;
+            }
+
+            //Commissions journaliere revendeur---------------------------------------------------------------  
             if (pojoUssd.getMessage().equals("4") && sessionussd.getLastsep().equals("237*100*3") && sessionussd.getType().equals("1")) {
 
                 System.out.println(sessionussd.getLastsep());
                 sessionussd.setLastsep("237*100*3*4");
                 ussdRepository.save(sessionussd);
-
                 map.put("message", "Entrer votre code secret~0.Retour ");
                 map.put("command", "1");
                 return map;
@@ -1669,7 +1715,7 @@ public class UssdRestController {
                 return map;
             }
 
-            //Transfert d'argent ***********************************************************************************************************************************************       
+            //Transfert d'argent ---------------------------------------------------     
             if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100") && sessionussd.getType().equals("2")) {
                 response = new Responses();
                 response = ussdservice.CheckCompteExpediteur(pojoUssd.getMsisdn());
@@ -2462,21 +2508,20 @@ public class UssdRestController {
             }
 
             //Retrait PerfectPay------------------------------------------------------------------------------------------------------
-            
             if (pojoUssd.getMessage().equals("6") && sessionussd.getLastsep().equals("237*100") && sessionussd.getType().equals("2")) {
                 sessionussd.setLastsep("237*100*6");
                 ussdRepository.save(sessionussd);
 
-                map.put("message", "Entrer code du point de Vente ");
+                map.put("message", "Entrer le code du point de vente ");
                 map.put("command", "1");
                 return map;
             }
 
             //Etape Checker code du point de vente
-            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100*6") && sessionussd.getType().equals("2")&&sessionussd.getCodemarchant()==null) {
+            if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100*6") && sessionussd.getType().equals("2") && sessionussd.getCodemarchant() == null) {
                 response = new Responses();
                 response = ussdservice.checker_CodePointVente(pojoUssd.getMessage());
-                 System.out.println(response.getSucces());
+                System.out.println(response.getSucces());
                 if (response.getSucces() == -1) {
                     map.put("message", response.getMsg());
                     map.put("command", "1");
@@ -2501,35 +2546,35 @@ public class UssdRestController {
             if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100*6") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
                 response = new Responses();
                 response = ussdservice.checker_solde_Client_New_retrait(pojoUssd.getMessage(), sessionussd.getCodemarchant(), pojoUssd.getMsisdn());
-                
+
                 if (response.getSucces() == -2) {
                     map.put("message", response.getMsg());
                     map.put("command", "1");
                     return map;
                 }
-                
+
                 if (response.getSucces() == 18) {
                     map.put("message", response.getMsg());
                     map.put("command", "1");
                     return map;
                 }
-                
+
                 if (response.getSucces() == 1) {
                     sessionussd.setMontant(Double.parseDouble(pojoUssd.getMessage()));
                     ussdRepository.save(sessionussd);
-                    map.put("message", "Entrer votre code secret ");
+                    map.put("message", response.getMsg());
                     map.put("command", "1");
                     return map;
                 }
 
             }
-            System.out.println(sessionussd.getCodesecret()+"topa");
+            System.out.println(sessionussd.getCodesecret() + "topa");
 
             //Etape Checker le code Secret du client pour finaliser le retrait d'argent au point de vente
             if (!"0".equals(pojoUssd.getMessage()) && sessionussd.getLastsep().equals("237*100*6") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
                 response = new Responses();
                 response = ussdservice.validation_retrait_account_perfect_pay_NewMethode(sessionussd.getMontant().toString(), sessionussd.getCodemarchant(), pojoUssd.getMsisdn(), pojoUssd.getMessage());
-                System.out.println(response.getSucces()+" "+response.getSucces());
+                System.out.println(response.getSucces() + " " + response.getSucces());
                 if (response.getSucces() == -6) {
                     map.put("message", response.getMsg());
                     map.put("command", "1");
