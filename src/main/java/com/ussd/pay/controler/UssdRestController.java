@@ -1744,7 +1744,13 @@ public class UssdRestController {
 
             //Si c'est un transfert d'un compte perfectpay à un compte perfectpay------------------------------------------------------
             if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*1") && sessionussd.getType().equals("2")) {
-
+                response = new Responses();
+                response = ussdservice.Check_Etat_Compte_USSD(pojoUssd.getMsisdn());
+                if (response.getSucces() == 2) {
+                    map.put("message", response.getMsg());
+                    map.put("command", "0");
+                    return map;
+                }
                 System.out.println(sessionussd.getLastsep());
                 sessionussd.setLastsep("237*100*1*1");
                 ussdRepository.save(sessionussd);
