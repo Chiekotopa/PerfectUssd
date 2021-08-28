@@ -72,6 +72,9 @@ public class Sessionussd implements Serializable {
     private String lieunaissance;
     @Column(name = "numbcontribuable")
     private String numbcontribuable;
+
+    @Column(name = "raisontransfert")
+    private String raisonTransfert;
     @Column(name = "email")
     private String email;
     @Column(name = "type")
@@ -263,6 +266,16 @@ public class Sessionussd implements Serializable {
         this.date = date;
     }
 
+    public String getRaisonTransfert() {
+        return raisonTransfert;
+    }
+
+    public void setRaisonTransfert(String raisonTransfert) {
+        this.raisonTransfert = raisonTransfert;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -287,5 +300,5 @@ public class Sessionussd implements Serializable {
     public String toString() {
         return "com.ussd.pay.entities.Sessionussd[ idussd=" + idussd + " ]";
     }
-    
+
 }

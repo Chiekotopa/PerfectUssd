@@ -20,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 
 /**
  *
- * @author Carlos TCHIOZEM
+ * @author Chieko Topa
  */
 @Service
 public class UssdService extends Thread {
@@ -403,19 +403,19 @@ public class UssdService extends Thread {
                 + "&Projet=" + sessiontrans.getProjet()
                 + "&Montant=" + sessiontrans.getMontant() + "&MoyenTransaction=PERFECTPAY&Telephone=" + sessiontrans.getPhonedestinataire() + "";
         restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-       
+
     }
 
     public Responses checkerSiRetraitEnCours(String phoneDest) {
-        Responses response = new Responses(); 
+        Responses response = new Responses();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
         String boString = "";
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
 
-        String url = "https://api.kakotel.com/api-perfectpay.php?action=checker_si_retrait_en_cours&Code_clientExpediteurint="+phoneDest+ "";
+        String url = "https://api.kakotel.com/api-perfectpay.php?action=checker_si_retrait_en_cours&Code_clientExpediteurint=" + phoneDest + "";
         response = restTemplate.getForObject(url, Responses.class, response);
-       
+
         return response;
     }
 
@@ -522,76 +522,101 @@ public class UssdService extends Thread {
 
         return response;
     }
+
+    public Responses Check_Etat_Compte_USSD(String phone) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "https://api.kakotel.com/api-perfectpay.php?action=Check_Etat_Compte_USSD&CodeClient=" + phone + "";
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
+
+    public Responses checker_CodePointVente(String codePointVente) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "https://api.kakotel.com/api-perfectpay.php?action=checker_CodePointVente&Code_PointVentePerfectPay=" + codePointVente;
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
+
+    public Responses checker_solde_Client_New_retrait(String amount, String codePointVente, String PhoneNumber) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "https://api.kakotel.com/api-perfectpay.php?action=checker_solde_Client_New_retrait&Code_PointVentePerfectPay=" + codePointVente + "&Code_clientDestinataire=" + PhoneNumber + "&Montant=" + amount + "";
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
+
+    public Responses validation_retrait_account_perfect_pay_NewMethode(String amount, String codePointVente, String phoneNumber, String secureCode) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "https://api.kakotel.com/api-perfectpay.php?action=validation_retrait_account_perfect_pay_NewMethode&Code_clientExpediteur=" + phoneNumber + "&Code_PointVentePerfectPay=" + codePointVente + "&Montant=" + amount + "&CodeSecurite=" + secureCode + "";
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
+
+    public Responses Afficher_CodePointVente(String codePointVente) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        String boString = "";
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+
+        String url = "https://api.kakotel.com/api-perfectpay.php?action=Afficher_CodePointVente&Code_Client=" + codePointVente;
+        response = restTemplate.getForObject(url, Responses.class, response);
+
+        return response;
+    }
     
-     public Responses Check_Etat_Compte_USSD(String phone) {
+     public Responses checker_solde_transfert_autre_compte_OrangeMoney_USSD(String clientExpediteur,String code_clientDestinataire,String montant) {
         Responses response = new Responses();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
         String boString = "";
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
 
-        String url = "https://api.kakotel.com/api-perfectpay.php?action=Check_Etat_Compte_USSD&CodeClient="+phone+"";
+        String url = "https://api.kakotel.com/api-perfectpay.php?action=checker_solde_transfert_autre_compte_OrangeMoney_USSD&Code_clientExpediteur="
+                +clientExpediteur+"&Code_clientDestinataire="+code_clientDestinataire+"&Montant="+montant+"";
         response = restTemplate.getForObject(url, Responses.class, response);
 
         return response;
     }
+    
      
-      public Responses checker_CodePointVente(String codePointVente) {
+     public Responses transfert_account_perfect_pay_vers_orangeMoney_USSD(Sessionussd s) {
         Responses response = new Responses();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
         String boString = "";
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
-
-        String url = "https://api.kakotel.com/api-perfectpay.php?action=checker_CodePointVente&Code_PointVentePerfectPay="+codePointVente;
+         System.out.println("dest :"+s.getDestinataire()+" &Montant="+Integer.parseInt(s.getMontant().toString())+" &CodeSecurite="+s.getCodesecret()+" &Raison_transfert="+s.getRaisonTransfert());
+       String url = "https://api.kakotel.com/api-perfectpay.php?action=transfert_account_perfect_pay_vers_orangeMoney_USSD&Code_clientExpediteur="
+               +s.getMsisdn().substring(3)+"&Code_clientDestinataireOrange="+s.getDestinataire()+"&Montant="+s.getMontant().toString()+"&CodeSecurite="+s.getCodesecret()+"&Raison_transfert="+s.getRaisonTransfert()+"";
         response = restTemplate.getForObject(url, Responses.class, response);
 
         return response;
     }
-      
-       public Responses checker_solde_Client_New_retrait(String amount,String codePointVente,String PhoneNumber) {
-        Responses response = new Responses();
-        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
-        String boString = "";
-        headers.set(HttpHeaders.ACCEPT, "application/json");
-        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
-
-        String url = "https://api.kakotel.com/api-perfectpay.php?action=checker_solde_Client_New_retrait&Code_PointVentePerfectPay="+codePointVente+"&Code_clientDestinataire="+PhoneNumber+"&Montant="+amount+"";
-        response = restTemplate.getForObject(url, Responses.class, response);
-
-        return response;
-    }
-       
-        public Responses validation_retrait_account_perfect_pay_NewMethode(String amount,String codePointVente,String phoneNumber,String secureCode) {
-        Responses response = new Responses();
-        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
-        String boString = "";
-        headers.set(HttpHeaders.ACCEPT, "application/json");
-        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
-
-        String url = "https://api.kakotel.com/api-perfectpay.php?action=validation_retrait_account_perfect_pay_NewMethode&Code_clientExpediteur="+phoneNumber+"&Code_PointVentePerfectPay="+codePointVente+"&Montant="+amount+"&CodeSecurite="+secureCode+"";
-        response = restTemplate.getForObject(url, Responses.class, response);
-
-        return response;
-    }
-        
-        public Responses Afficher_CodePointVente(String codePointVente) {
-        Responses response = new Responses();
-        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
-        String boString = "";
-        headers.set(HttpHeaders.ACCEPT, "application/json");
-        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
-
-        String url = "https://api.kakotel.com/api-perfectpay.php?action=Afficher_CodePointVente&Code_Client="+codePointVente;
-        response = restTemplate.getForObject(url, Responses.class, response);
-
-        return response;
-    }
-        
-        
-     
-     
-     
+    
 
     public String replaceChaine(String chaine) {
 
@@ -613,8 +638,8 @@ public class UssdService extends Thread {
 
         return replace1;
     }
-    
-     public String replaceChainePhone(String chaine) {
+
+    public String replaceChainePhone(String chaine) {
 
         String originalstring = chaine;
         String replace1 = originalstring.replace('%', ' ');
