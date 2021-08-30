@@ -605,13 +605,11 @@ public class UssdService extends Thread {
      
      public Responses transfert_account_perfect_pay_vers_orangeMoney_USSD(Sessionussd s) {
         Responses response = new Responses();
-        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
-        String boString = "";
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");   
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
-         System.out.println("dest :"+s.getDestinataire()+" &Montant="+Integer.parseInt(s.getMontant().toString())+" &CodeSecurite="+s.getCodesecret()+" &Raison_transfert="+s.getRaisonTransfert());
        String url = "https://api.kakotel.com/api-perfectpay.php?action=transfert_account_perfect_pay_vers_orangeMoney_USSD&Code_clientExpediteur="
-               +s.getMsisdn().substring(3)+"&Code_clientDestinataireOrange="+s.getDestinataire()+"&Montant="+s.getMontant().toString()+"&CodeSecurite="+s.getCodesecret()+"&Raison_transfert="+s.getRaisonTransfert()+"";
+               +s.getMsisdn().substring(3)+"&Code_clientDestinataireOrange="+s.getDestinataire()+"&Montant="+s.getMontant().intValue()+"&CodeSecurite="+s.getCodesecret()+"&Raison_transfert="+s.getRaisonTransfert()+"";
         response = restTemplate.getForObject(url, Responses.class, response);
 
         return response;
