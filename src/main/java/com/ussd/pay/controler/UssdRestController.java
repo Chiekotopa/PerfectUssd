@@ -121,7 +121,7 @@ public class UssdRestController {
                         sessionussd.setType("2");
                         sessionussd.setDate(new Date(System.currentTimeMillis()));
                         ussdRepository.save(sessionussd);
-                        map.put("message", "Bienvenue sur PerfectPay Client~1.Transfert d'argent~2.Paiement Marchand~3.Operations Bancaires~4.Services Tiers~5.Mon Compte~6.Retrait Perfectpay~0.Annuler ");
+                        map.put("message", "Bienvenue sur PerfectPay Client~1.Transfert d'argent~2.Paiement Marchand~3.Operations Bancaires~4.Services Tiers~5.Mon Compte~6.Retrait Perfectpay~7.GimacPay~0.Annuler ");
                         map.put("command", "0");
                         return map;
                     }
@@ -541,6 +541,7 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
+            
             //retour sous menu marchand------------------------------
             if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*1") && sessionussd.getType().equals("8")) {
                 sessionussd.setLastsep("237*100");
@@ -1641,7 +1642,7 @@ public class UssdRestController {
                 return map;
 
             }
-
+            
             if (pojoUssd.getMessage().equals("1") && sessionussd.getAccess().equals("1") && sessionussd.getType().equals("-1")) {
                 sessionussd.setAccess("nom");
                 ussdRepository.save(sessionussd);
@@ -2043,7 +2044,7 @@ public class UssdRestController {
                 }
             }
 
-            //Si c'est un transfert d'un compte perfectpay à un compte Mtn Money         
+            //Si c'est un transfert d'un compte perfectpay à un compte Mtn Money*******************************************************         
             if (pojoUssd.getMessage().equals("2") && sessionussd.getLastsep().equals("237*100*1") && sessionussd.getType().equals("2")) {
 
                 sessionussd.setLastsep("237*100*1*2");
@@ -2053,7 +2054,7 @@ public class UssdRestController {
                 return map;
             }
 
-            //Si c'est un transfert d'un compte perfectpay à un compte Orange Money         
+            //Si c'est un transfert d'un compte perfectpay à un compte Orange Money*********************************************************        
             if (pojoUssd.getMessage().equals("3") && sessionussd.getLastsep().equals("237*100*1") && sessionussd.getType().equals("2")) {
 
                 sessionussd.setLastsep("237*100*1*3");
@@ -2241,7 +2242,7 @@ public class UssdRestController {
                 sessionussd.setLastsep("237*100");
                 ussdRepository.save(sessionussd);
 
-                map.put("message", "Bienvenue sur PerfectPay Client~1.Transfert d'argent~2.Paiement Marchand~3.Operations Bancaires~4.Services Tiers~5.Mon compte~6.Retrait PerfectPay~0.Annuler ");
+                map.put("message", "Bienvenue sur PerfectPay Client~1.Transfert d'argent~2.Paiement Marchand~3.Operations Bancaires~4.Services Tiers~5.Mon compte~6.Retrait PerfectPay~7.GimacPay~0.Annuler ");
                 map.put("command", "1");
                 return map;
             }
@@ -2464,7 +2465,7 @@ public class UssdRestController {
                 sessionussd.setLastsep("237*100");
                 ussdRepository.save(sessionussd);
 
-                map.put("message", "Bienvenue sur PerfectPay Client~1.Transfert d'argent~2.Paiement Marchand~3.Operations Bancaires~4.Services Tiers~5.Mon compte~0.Annuler ");
+                map.put("message", "Bienvenue sur PerfectPay Client~1.Transfert d'argent~2.Paiement Marchand~3.Operations Bancaires~4.Services Tiers~5.Mon compte~6.Retrait PerfectPay~7.GimacPay~0.Annuler ");
                 map.put("command", "1");
                 return map;
             }
@@ -2786,7 +2787,7 @@ public class UssdRestController {
                 return map;
             }
 
-            //Retrait PerfectPay------------------------------------------------------------------------------------------------------
+            //Retrait PerfectPay-------------------------------------------------------------------------------------------------------------------------------
             if (pojoUssd.getMessage().equals("6") && sessionussd.getLastsep().equals("237*100") && sessionussd.getType().equals("2")) {
                 response = new Responses();
                 response = ussdservice.Check_Etat_Compte_USSD(pojoUssd.getMsisdn());
@@ -2875,12 +2876,33 @@ public class UssdRestController {
                 }
 
             }
+            
+            //si GimacPAY est selectionne par l'utilisateur
+            if(pojoUssd.getMessage().equals("7") && sessionussd.getLastsep().equals("237*100") && sessionussd.getType().equals("2")){
+               sessionussd.setLastsep("237*100*7");
+               ussdRepository.save(sessionussd);  
+               map.put("message", "GimacPay~1.Wallet Mobile~2.Banque~3.Mise a disposition GAB~0.Retour ");
+               map.put("command", "1");
+               return map; 
+            }
+            
+            
+            
+            
+             //retour au menu Accueil
+             if(pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7") && sessionussd.getType().equals("2")){
+               sessionussd.setLastsep("237*100");
+               ussdRepository.save(sessionussd);  
+               map.put("message", "Bienvenue sur PerfectPay Client~1.Transfert d'argent~2.Paiement Marchand~3.Operations Bancaires~4.Services Tiers~5.Mon Compte~6.Retrait Perfectpay~7.GimacPay~0.Annuler ");
+               map.put("command", "1");
+               return map; 
+            }
 
             //retour au sous menu mon compte PerfectPay
             if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*5*1") && sessionussd.getType().equals("2")) {
 
                 sessionussd.setLastsep("237*100*5");
-
+                ussdRepository.save(sessionussd);
                 map.put("message", "Mon compte PerfectPay~1.Consulter solde~2.Modifier Code PIN~3.Consulter dernieres transactions~4.Changer de langue~0.Retour ");
                 map.put("command", "1");
                 return map;
