@@ -2885,7 +2885,8 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
-
+            
+            //Transfert wallet******************************************************************************************************
             if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*7") && sessionussd.getType().equals("2")) {
                 sessionussd.setLastsep("237*100*7*1");
                 ussdRepository.save(sessionussd);
@@ -2893,20 +2894,103 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
-
+            
+            //Transfert Transfert MNO-..................................................
             //etape Selection du pays
             if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*7*1") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*1");
+                ussdRepository.save(sessionussd);
                 map.put("message", "Selectioner le pays~1.Cameroun~2.Congo~3.Gabon~4.Republique Centrafricaine~5.Tchad~0.Retour ");
                 map.put("command", "1");
                 return map;
             }
-            
-            //Affiche liste operateur en fonction du pays**********************************************
-             if (!pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*7*1") && sessionussd.getType().equals("2")&& sessionussd.getAccess()==null) {
-                map.put("message", "Selectioner le wallet recipiendaire~1.Orange Money~2.MTN MoMo~3.YUP de SG~0.Retour ");
+
+            //Affiche liste operateur en fonction du pays**//
+            //Si 1.Cameroun 
+            if (!pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*7*1*1") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*1*1");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Cameroun/Selectioner la Wallet~1.Orange Money~2.MTN MoMo~3.YUP de SG~0.Retour ");
                 map.put("command", "1");
                 return map;
             }
+
+            //Si 2.Congo 
+            if (!pojoUssd.getMessage().equals("2") && sessionussd.getLastsep().equals("237*100*7*1*1") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*1*2");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Congo/Selectioner la wallet~1.Airtel Money~2.MTN MoMo~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+
+            //Si 3.Gabon 
+            if (!pojoUssd.getMessage().equals("3") && sessionussd.getLastsep().equals("237*100*7*1*1") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*1*3");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Gabon/Selectioner la wallet~1.Airtel Money~2.Moov Money~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+
+            //Si 4.Republique Centrafricaine
+            if (!pojoUssd.getMessage().equals("4") && sessionussd.getLastsep().equals("237*100*7*1*1") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*1*4");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Republique Centrafricaine/Selectioner la wallet~1.Orange Money~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+            
+            //Si 5.Tchad
+            if (!pojoUssd.getMessage().equals("5") && sessionussd.getLastsep().equals("237*100*7*1*1") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*1*5");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Tchad/Selectioner la wallet~1.Airtel Money~2.Moov Money~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+            
+            //Transfert banque-..................................................
+            //etape Selection du pays
+            if (pojoUssd.getMessage().equals("2") && sessionussd.getLastsep().equals("237*100*7*1") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*2");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Selectioner le pays~1.Cameroun~2.Congo~3.Gabon~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+
+            //Affiche liste bancaire en fonction du pays**//
+            //Si 1.Cameroun 
+            if (!pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*7*1*2") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*2*1");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Selectioner la banque~1.BICEC~2.CBC~3.CCA Bank~4.Express Union~5.La Régionale~6.UBC~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+
+            //Si 2.Congo 
+            if (!pojoUssd.getMessage().equals("2") && sessionussd.getLastsep().equals("237*100*7*1*2") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*2*2");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Selectioner la banque~1.BCI Mobile~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+
+            //Si 3.Gabon 
+            if (!pojoUssd.getMessage().equals("3") && sessionussd.getLastsep().equals("237*100*7*1*2") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*2*3");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Selectioner la banque~1.BGFI Gabon~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+
+            
+            
 
             //retour au menu Gimac*****************************************
             if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1") && sessionussd.getType().equals("2")) {
