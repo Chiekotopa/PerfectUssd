@@ -541,7 +541,7 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
-            
+
             //retour sous menu marchand------------------------------
             if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*1") && sessionussd.getType().equals("8")) {
                 sessionussd.setLastsep("237*100");
@@ -1642,7 +1642,7 @@ public class UssdRestController {
                 return map;
 
             }
-            
+
             if (pojoUssd.getMessage().equals("1") && sessionussd.getAccess().equals("1") && sessionussd.getType().equals("-1")) {
                 sessionussd.setAccess("nom");
                 ussdRepository.save(sessionussd);
@@ -2110,7 +2110,7 @@ public class UssdRestController {
                 response = new Responses();
                 sessionussd.setCodesecret(pojoUssd.getMessage());
                 response = ussdservice.transfert_account_perfect_pay_vers_orangeMoney_USSD(sessionussd);
-                System.out.println(response.getSucces()+"-*-*-*--*-*-*----------------------------***********************");
+                System.out.println(response.getSucces() + "-*-*-*--*-*-*----------------------------***********************");
                 if (response.getSucces() == 1) {
                     sessionussd.setCodesecret("Ok");
                     ussdRepository.save(sessionussd);
@@ -2119,42 +2119,42 @@ public class UssdRestController {
                     return map;
                 }
                 if (response.getSucces() == -3) {
-                    map.put("message",response.getMsg());
+                    map.put("message", response.getMsg());
                     map.put("command", "1");
                     return map;
                 }
                 if (response.getSucces() == -4) {
-                    map.put("message",response.getMsg());
+                    map.put("message", response.getMsg());
                     map.put("command", "1");
                     return map;
                 }
-                 if (response.getSucces() == -5) {
-                    map.put("message",response.getMsg());
+                if (response.getSucces() == -5) {
+                    map.put("message", response.getMsg());
                     map.put("command", "1");
                     return map;
                 }
-                 if (response.getSucces() == -6) {
-                    map.put("message",response.getMsg());
+                if (response.getSucces() == -6) {
+                    map.put("message", response.getMsg());
                     map.put("command", "1");
                     return map;
                 }
-                 if (response.getSucces() == -7) {
-                    map.put("message",response.getMsg());
+                if (response.getSucces() == -7) {
+                    map.put("message", response.getMsg());
                     map.put("command", "1");
                     return map;
                 }
-                 if (response.getSucces() == -8) {
-                    map.put("message",response.getMsg());
+                if (response.getSucces() == -8) {
+                    map.put("message", response.getMsg());
                     map.put("command", "1");
                     return map;
                 }
-                 if (response.getSucces() == -9) {
-                    map.put("message",response.getMsg());
+                if (response.getSucces() == -9) {
+                    map.put("message", response.getMsg());
                     map.put("command", "1");
                     return map;
                 }
-                 if (response.getSucces() == -10) {
-                    map.put("message",response.getMsg());
+                if (response.getSucces() == -10) {
+                    map.put("message", response.getMsg());
                     map.put("command", "1");
                     return map;
                 }
@@ -2876,26 +2876,53 @@ public class UssdRestController {
                 }
 
             }
-            
-            //si GimacPAY est selectionne par l'utilisateur
-            if(pojoUssd.getMessage().equals("7") && sessionussd.getLastsep().equals("237*100") && sessionussd.getType().equals("2")){
-               sessionussd.setLastsep("237*100*7");
-               ussdRepository.save(sessionussd);  
-               map.put("message", "GimacPay~1.Wallet Mobile~2.Banque~3.Mise a disposition GAB~0.Retour ");
-               map.put("command", "1");
-               return map; 
+
+            //Si GimacPAY est selectionne par l'utilisateur--------------------------------------------------------------------------------------------------------
+            if (pojoUssd.getMessage().equals("7") && sessionussd.getLastsep().equals("237*100") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7");
+                ussdRepository.save(sessionussd);
+                map.put("message", "GimacPay~1.Transfert wallet~2.Paiement marchand~3.Paiement de facture~4.Retrait sans carte~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+
+            if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*7") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Transfert wallet~1.Transfert MNO~2.Transfert banque~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+
+            //etape Selection du pays
+            if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*7*1") && sessionussd.getType().equals("2")) {
+                map.put("message", "Selectioner le pays~1.Cameroun~2.Congo~3.Gabon~4.Republique Centrafricaine~5.Tchad~0.Retour ");
+                map.put("command", "1");
+                return map;
             }
             
-            
-            
-            
-             //retour au menu Accueil
-             if(pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7") && sessionussd.getType().equals("2")){
-               sessionussd.setLastsep("237*100");
-               ussdRepository.save(sessionussd);  
-               map.put("message", "Bienvenue sur PerfectPay Client~1.Transfert d'argent~2.Paiement Marchand~3.Operations Bancaires~4.Services Tiers~5.Mon Compte~6.Retrait Perfectpay~7.GimacPay~0.Annuler ");
-               map.put("command", "1");
-               return map; 
+            //Affiche liste operateur en fonction du pays**********************************************
+             if (!pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*7*1") && sessionussd.getType().equals("2")&& sessionussd.getAccess()==null) {
+                map.put("message", "Selectioner le wallet recipiendaire~1.Orange Money~2.MTN MoMo~3.YUP de SG~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+
+            //retour au menu Gimac*****************************************
+            if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7");
+                ussdRepository.save(sessionussd);
+                map.put("message", "GimacPay~1.Transfert wallet~2.Paiement marchand~3.Paiement de facture~4.Retrait sans carte~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+
+            if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Bienvenue sur PerfectPay Client~1.Transfert d'argent~2.Paiement Marchand~3.Operations Bancaires~4.Services Tiers~5.Mon Compte~6.Retrait Perfectpay~7.GimacPay~0.Annuler ");
+                map.put("command", "1");
+                return map;
             }
 
             //retour au sous menu mon compte PerfectPay
