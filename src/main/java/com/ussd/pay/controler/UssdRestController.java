@@ -2885,7 +2885,7 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
-            
+
             //Transfert wallet******************************************************************************************************
             if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*7") && sessionussd.getType().equals("2")) {
                 sessionussd.setLastsep("237*100*7*1");
@@ -2894,7 +2894,7 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
-            
+
             //Transfert Transfert MNO-..................................................
             //etape Selection du pays
             if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*7*1") && sessionussd.getType().equals("2")) {
@@ -2941,7 +2941,7 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
-            
+
             //Si 5.Tchad
             if (!pojoUssd.getMessage().equals("5") && sessionussd.getLastsep().equals("237*100*7*1*1") && sessionussd.getType().equals("2")) {
                 sessionussd.setLastsep("237*100*7*1*1*5");
@@ -2950,7 +2950,7 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
-            
+
             //Transfert banque-..................................................
             //etape Selection du pays
             if (pojoUssd.getMessage().equals("2") && sessionussd.getLastsep().equals("237*100*7*1") && sessionussd.getType().equals("2")) {
@@ -2989,10 +2989,87 @@ public class UssdRestController {
                 return map;
             }
 
-            
-            
+            //retour au menu Gimac***********************************************************------------------------//
+                ////retour au menu selecttion pays a partir de l'option wallet selectionner
+            if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*1*1") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*1");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Selectioner le pays~1.Cameroun~2.Congo~3.Gabon~4.Republique Centrafricaine~5.Tchad~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+            if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*1*2") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*1");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Selectioner le pays~1.Cameroun~2.Congo~3.Gabon~4.Republique Centrafricaine~5.Tchad~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
 
-            //retour au menu Gimac*****************************************
+            if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*1*3") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*1");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Selectioner le pays~1.Cameroun~2.Congo~3.Gabon~4.Republique Centrafricaine~5.Tchad~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+
+            if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*1*4") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*1");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Selectioner le pays~1.Cameroun~2.Congo~3.Gabon~4.Republique Centrafricaine~5.Tchad~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+
+            if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*1*5") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*1");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Selectioner le pays~1.Cameroun~2.Congo~3.Gabon~4.Republique Centrafricaine~5.Tchad~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+            
+            //retour au menu selecttion pays a partir de  l'option Banque selectionner
+            if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*3") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*2");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Selectioner le pays~1.Cameroun~2.Congo~3.Gabon~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+
+            if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*2") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*2");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Selectioner le pays~1.Cameroun~2.Congo~3.Gabon~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+            if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*2");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Selectioner le pays~1.Cameroun~2.Congo~3.Gabon~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+            //retour au menu transfer wallet
+            if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*1") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Transfert wallet~1.Transfert MNO~2.Transfert banque~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+
+            if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Transfert wallet~1.Transfert MNO~2.Transfert banque~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+            //retour au menu GimacPay
             if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1") && sessionussd.getType().equals("2")) {
                 sessionussd.setLastsep("237*100*7");
                 ussdRepository.save(sessionussd);
@@ -3000,7 +3077,7 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
-
+            //retour au menu PerfectPay Client
             if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7") && sessionussd.getType().equals("2")) {
                 sessionussd.setLastsep("237*100");
                 ussdRepository.save(sessionussd);
