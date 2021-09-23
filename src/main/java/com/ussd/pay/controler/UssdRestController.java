@@ -42,7 +42,7 @@ public class UssdRestController {
 
     @Autowired
     MultiThread multiThread1;
-
+    
     @RequestMapping(value = "/ussd", method = RequestMethod.POST)
     public HashMap getUssd(@RequestBody PojoUssd pojoUssd) {
         HashMap map = new HashMap();
