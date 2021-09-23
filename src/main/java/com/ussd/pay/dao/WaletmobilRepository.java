@@ -5,8 +5,11 @@
  */
 package com.ussd.pay.dao;
 
+import com.ussd.pay.entities.Sessiontrans;
 import com.ussd.pay.entities.Waletmobilegimac;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  *
@@ -14,4 +17,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface WaletmobilRepository extends JpaRepository<Waletmobilegimac, Integer> {
     
+    @Query("SELECT w FROM Waletmobilegimac w WHERE w.paysgimacId=:idpays AND w.libelleWalet:libelWalet")
+    public Waletmobilegimac findByWaletmobilegimac(@Param("idpays") String idpays,@Param("libelWalet")String libelWalet );
 }

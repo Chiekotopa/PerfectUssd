@@ -7,6 +7,8 @@ package com.ussd.pay.controler;
 
 import com.ussd.pay.dao.SessionUssdRepository;
 import com.ussd.pay.dao.SessiontransRepository;
+import com.ussd.pay.dao.WaletbancaireRepository;
+import com.ussd.pay.dao.WaletmobilRepository;
 import com.ussd.pay.entities.Sessiontrans;
 import com.ussd.pay.entities.Sessionussd;
 import com.ussd.pay.pojo.PojoUssd;
@@ -39,6 +41,12 @@ public class UssdRestController {
 
     @Autowired
     SessiontransRepository sessiontransRepository;
+    
+    @Autowired
+    WaletbancaireRepository waletbancaireRepository;
+    
+    @Autowired
+    WaletmobilRepository waletmobilRepository;
 
     @Autowired
     MultiThread multiThread1;
@@ -2906,7 +2914,7 @@ public class UssdRestController {
             }
 
             //Affiche liste operateur en fonction du pays**//
-            //Si 1.Cameroun 
+            //Si 1.Cameroun ----------------------CAMEROUN-----------------------------------------------------------
             if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*7*1*1") && sessionussd.getType().equals("2")) {
                 sessionussd.setLastsep("237*100*7*1*1*1");
                 ussdRepository.save(sessionussd);
@@ -2914,6 +2922,9 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
+            
+            
+            
 
             //Si 2.Congo 
             if (pojoUssd.getMessage().equals("2") && sessionussd.getLastsep().equals("237*100*7*1*1") && sessionussd.getType().equals("2")) {
