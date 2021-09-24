@@ -18,5 +18,6 @@ import org.springframework.data.repository.query.Param;
 public interface WaletmobilRepository extends JpaRepository<Waletmobilegimac, Integer> {
     
     @Query("SELECT w FROM Waletmobilegimac w WHERE w.paysgimacId=:idpays AND w.libelleWalet=:libelWalet")
-    public Waletmobilegimac findByWaletmobilegimac(@Param("idpays") String idpays,@Param("libelWalet")String libelWalet );
+    public Waletmobilegimac findByWaletmobilegimac(@Param("idpays") int
+            idpays,@Param("libelWalet")String libelWalet );
 }

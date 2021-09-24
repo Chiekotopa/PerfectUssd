@@ -587,8 +587,8 @@ public class UssdService extends Thread {
 
         return response;
     }
-    
-     public Responses checker_solde_transfert_autre_compte_OrangeMoney_USSD(String clientExpediteur,String code_clientDestinataire,String montant) {
+
+    public Responses checker_solde_transfert_autre_compte_OrangeMoney_USSD(String clientExpediteur, String code_clientDestinataire, String montant) {
         Responses response = new Responses();
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
         String boString = "";
@@ -596,37 +596,43 @@ public class UssdService extends Thread {
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
 
         String url = "https://api.kakotel.com/api-perfectpay.php?action=checker_solde_transfert_autre_compte_OrangeMoney_USSD&Code_clientExpediteur="
-                +clientExpediteur+"&Code_clientDestinataire="+code_clientDestinataire+"&Montant="+montant+"";
+                + clientExpediteur + "&Code_clientDestinataire=" + code_clientDestinataire + "&Montant=" + montant + "";
         response = restTemplate.getForObject(url, Responses.class, response);
 
         return response;
     }
-    
-     
-     public Responses transfert_account_perfect_pay_vers_orangeMoney_USSD(Sessionussd s) {
+
+    public Responses transfert_account_perfect_pay_vers_orangeMoney_USSD(Sessionussd s) {
         Responses response = new Responses();
-        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");   
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
-       String url = "https://api.kakotel.com/api-perfectpay.php?action=transfert_account_perfect_pay_vers_orangeMoney_USSD&Code_clientExpediteur="
-               +s.getMsisdn().substring(3)+"&Code_clientDestinataireOrange="+s.getDestinataire()+"&Montant="+s.getMontant().intValue()+"&CodeSecurite="+s.getCodesecret()+"&Raison_transfert="+s.getRaisontransfert()+"";
+        String url = "https://api.kakotel.com/api-perfectpay.php?action=transfert_account_perfect_pay_vers_orangeMoney_USSD&Code_clientExpediteur="
+                + s.getMsisdn().substring(3) + "&Code_clientDestinataireOrange=" + s.getDestinataire() + "&Montant=" + s.getMontant().intValue() + "&CodeSecurite=" + s.getCodesecret() + "&Raison_transfert=" + s.getRaisontransfert() + "";
         response = restTemplate.getForObject(url, Responses.class, response);
 
         return response;
     }
-     
-       public Responses Solde_transfert_walet_MNO_USSD(Sessionussd s) {
+
+    public Responses Solde_transfert_walet_MNO_USSD(Sessionussd s) {
         Responses response = new Responses();
-        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");   
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
-       String url = "https://api.kakotel.com/api-gimacpay_mobile.php?action=Solde_transfert_walet_MNO_USSD&Code_clientExpediteur=$SaisirCode_clientExpediteur&Code_clientDestinataire=$SaisirCode_clientDestinataire&Montant=$SaisirMontant&WalletDestinataire=$SaisirWaletDestinataire";
-            
+        String url = "https://api.kakotel.com/api-gimacpay_mobile.php?action=Solde_transfert_walet_MNO_USSD&Code_clientExpediteur=" + s.getMsisdn().substring(3) + "&Code_clientDestinataire=" + s.getDestinataire() + "&Montant=" + s.getMontant() + "&WalletDestinataire=" + s.getWallet() + "";
+        response = restTemplate.getForObject(url, Responses.class, response);
         return response;
     }
-     
-    
-    
+
+    public Responses Valide_Transfert_walet_MNO_USSD(Sessionussd s) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+        String url = "https://api.kakotel.com/api-gimacpay_mobile.php?action=Valide_Transfert_walet_MNO_USSD&Code_clientExpediteur=" + s.getMsisdn().substring(3) + "&Code_clientDestinataire=" + s.getDestinataire() + "&Montant=" + s.getMontant() + "&WalletDestinataire=" + s.getWallet() + "&ReferenceTransaction=" + s.getReference() + "&CodeSecurite=" + s.getCodesecret() + "";
+        response = restTemplate.getForObject(url, Responses.class, response);
+        return response;
+    }
 
     public String replaceChaine(String chaine) {
 
