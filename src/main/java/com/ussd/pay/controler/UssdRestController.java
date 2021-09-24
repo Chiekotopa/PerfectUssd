@@ -11,6 +11,7 @@ import com.ussd.pay.dao.WaletbancaireRepository;
 import com.ussd.pay.dao.WaletmobilRepository;
 import com.ussd.pay.entities.Sessiontrans;
 import com.ussd.pay.entities.Sessionussd;
+import com.ussd.pay.entities.Waletmobilegimac;
 import com.ussd.pay.pojo.PojoUssd;
 import com.ussd.pay.pojo.Responses;
 import com.ussd.pay.service.MultiThread;
@@ -2097,16 +2098,16 @@ public class UssdRestController {
                 }
             }
 
-            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*1*3") && sessionussd.getRaisonTransfert() == null && sessionussd.getType().equals("2")) {
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*1*3") && sessionussd.getRaisontransfert() == null && sessionussd.getType().equals("2")) {
                 if (pojoUssd.getMessage() != null) {
-                    sessionussd.setRaisonTransfert(pojoUssd.getMessage());
+                    sessionussd.setRaisontransfert(pojoUssd.getMessage());
                     ussdRepository.save(sessionussd);
                     map.put("message", "Entrer votre code secret ");
                     map.put("command", "1");
                     return map;
                 }
                 if (pojoUssd.getMessage() == null) {
-                    sessionussd.setRaisonTransfert("Transfert perfectpay vers Orange Money");
+                    sessionussd.setRaisontransfert("Transfert perfectpay vers Orange Money");
                     ussdRepository.save(sessionussd);
                     map.put("message", "Entrer votre code secret ");
                     map.put("command", "1");
@@ -2917,8 +2918,37 @@ public class UssdRestController {
             //Si 1.Cameroun ----------------------CAMEROUN-----------------------------------------------------------
             if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*7*1*1") && sessionussd.getType().equals("2")) {
                 sessionussd.setLastsep("237*100*7*1*1*1");
+                System.out.println("******************* save pays");
+                sessionussd.setPays("1");
                 ussdRepository.save(sessionussd);
-                map.put("message", "Cameroun/Selectioner la Wallet~1.Orange Money~2.MTN MoMo~3.YUP de SG~0.Retour ");
+                map.put("message", "Cameroun/Selectioner la Wallet recipiendaire~1.Orange Money~2.MTN MoMo~3.YUP de SG~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+            
+            if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*7*1*1*1") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*1*1*1");
+                Waletmobilegimac waletmobilegimac=waletmobilRepository.findByWaletmobilegimac(sessionussd.getPays(), "Orange Money");
+                sessionussd.setWallet(waletmobilegimac.getCodeWalet());
+                System.out.println(waletmobilegimac.getCodeWalet());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Saisir le numero de telephone recipiendaire~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+            
+             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*1*1*1") && sessionussd.getType().equals("2")&& sessionussd.getMontant()==null) {
+                sessionussd.setDestinataire(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le montant a transferer~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+             
+             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*1*1*1") && sessionussd.getType().equals("2")&& sessionussd.getReference()==null) {
+               
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
                 map.put("command", "1");
                 return map;
             }

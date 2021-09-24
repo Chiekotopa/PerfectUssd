@@ -18,7 +18,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -26,7 +25,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "sessionussd")
-
+@NamedQueries({
+    @NamedQuery(name = "Sessionussd.findAll", query = "SELECT s FROM Sessionussd s")})
 public class Sessionussd implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -72,9 +72,6 @@ public class Sessionussd implements Serializable {
     private String lieunaissance;
     @Column(name = "numbcontribuable")
     private String numbcontribuable;
-
-    @Column(name = "raisontransfert")
-    private String raisonTransfert;
     @Column(name = "email")
     private String email;
     @Column(name = "type")
@@ -82,6 +79,14 @@ public class Sessionussd implements Serializable {
     @Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
+    @Column(name = "raisontransfert")
+    private String raisontransfert;
+    @Column(name = "reference")
+    private String reference;
+    @Column(name = "pays")
+    private String pays;
+    @Column(name = "wallet")
+    private String wallet;
 
     public Sessionussd() {
     }
@@ -266,15 +271,37 @@ public class Sessionussd implements Serializable {
         this.date = date;
     }
 
-    public String getRaisonTransfert() {
-        return raisonTransfert;
+    public String getRaisontransfert() {
+        return raisontransfert;
     }
 
-    public void setRaisonTransfert(String raisonTransfert) {
-        this.raisonTransfert = raisonTransfert;
+    public void setRaisontransfert(String raisontransfert) {
+        this.raisontransfert = raisontransfert;
     }
-    
-    
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
+
+    public String getPays() {
+        return pays;
+    }
+
+    public void setPays(String pays) {
+        this.pays = pays;
+    }
+
+    public String getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(String wallet) {
+        this.wallet = wallet;
+    }
 
     @Override
     public int hashCode() {
@@ -300,5 +327,5 @@ public class Sessionussd implements Serializable {
     public String toString() {
         return "com.ussd.pay.entities.Sessionussd[ idussd=" + idussd + " ]";
     }
-
+    
 }

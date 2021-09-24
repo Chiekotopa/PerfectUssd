@@ -609,11 +609,23 @@ public class UssdService extends Thread {
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
        String url = "https://api.kakotel.com/api-perfectpay.php?action=transfert_account_perfect_pay_vers_orangeMoney_USSD&Code_clientExpediteur="
-               +s.getMsisdn().substring(3)+"&Code_clientDestinataireOrange="+s.getDestinataire()+"&Montant="+s.getMontant().intValue()+"&CodeSecurite="+s.getCodesecret()+"&Raison_transfert="+s.getRaisonTransfert()+"";
+               +s.getMsisdn().substring(3)+"&Code_clientDestinataireOrange="+s.getDestinataire()+"&Montant="+s.getMontant().intValue()+"&CodeSecurite="+s.getCodesecret()+"&Raison_transfert="+s.getRaisontransfert()+"";
         response = restTemplate.getForObject(url, Responses.class, response);
 
         return response;
     }
+     
+       public Responses Solde_transfert_walet_MNO_USSD(Sessionussd s) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");   
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+       String url = "https://api.kakotel.com/api-gimacpay_mobile.php?action=Solde_transfert_walet_MNO_USSD&Code_clientExpediteur=$SaisirCode_clientExpediteur&Code_clientDestinataire=$SaisirCode_clientDestinataire&Montant=$SaisirMontant&WalletDestinataire=$SaisirWaletDestinataire";
+            
+        return response;
+    }
+     
+    
     
 
     public String replaceChaine(String chaine) {
