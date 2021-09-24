@@ -3932,7 +3932,7 @@ public class UssdRestController {
                 sessionussd.setLastsep("237*100*7*1*2*1");
                 sessionussd.setPays("1");
                 ussdRepository.save(sessionussd);
-                map.put("message", "Selectioner la banque~1.BICEC~2.CBC~3.CCA Bank~4.Express Union~5.La Régionale~6.UBC~0.Retour ");
+                map.put("message", "CAMEROUN/Selectioner la banque~1.BICEC~2.CBC~3.CCA Bank~4.Express Union~5.La Régionale~6.UBC~0.Retour ");
                 map.put("command", "1");
                 return map;
             }
@@ -4126,8 +4126,8 @@ public class UssdRestController {
                 }
 
             }
-            
-             //Operation Wallet CCA Bank CAMEROUN........................................................................................
+
+            //Operation Wallet CCA Bank CAMEROUN........................................................................................
             if (pojoUssd.getMessage().equals("3") && sessionussd.getLastsep().equals("237*100*7*1*2*1") && sessionussd.getType().equals("2")) {
                 sessionussd.setLastsep("237*100*7*1*2*1*3");
                 Waletbancairegimac waletbancairegimac = waletbancaireRepository.findByWaletbancairegimac(Integer.parseInt(sessionussd.getPays()), "Moving");
@@ -4221,8 +4221,7 @@ public class UssdRestController {
                 }
 
             }
-            
-            
+
             //Operation Wallet EXPRESS UNION CAMEROUN........................................................................................
             if (pojoUssd.getMessage().equals("4") && sessionussd.getLastsep().equals("237*100*7*1*2*1") && sessionussd.getType().equals("2")) {
                 sessionussd.setLastsep("237*100*7*1*2*1*4");
@@ -4318,22 +4317,404 @@ public class UssdRestController {
 
             }
 
-            //Si 2.Congo 
-            if (pojoUssd.getMessage().equals("2") && sessionussd.getLastsep().equals("237*100*7*1*2") && sessionussd.getType().equals("2")) {
-                sessionussd.setLastsep("237*100*7*1*2*2");
+            //Operation Wallet LA REGIONALE CAMEROUN........................................................................................
+            if (pojoUssd.getMessage().equals("5") && sessionussd.getLastsep().equals("237*100*7*1*2*1") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*2*1*5");
+                Waletbancairegimac waletbancairegimac = waletbancaireRepository.findByWaletbancairegimac(Integer.parseInt(sessionussd.getPays()), "Ananas Money");
+                sessionussd.setWallet(waletbancairegimac.getCodeWalet());
+                System.out.println(waletbancairegimac.getCodeWalet());
                 ussdRepository.save(sessionussd);
-                map.put("message", "Selectioner la banque~1.BCI Mobile~0.Retour ");
+                map.put("message", "Saisir le numero de telephone recipiendaire~0.Annuler ");
                 map.put("command", "1");
                 return map;
             }
 
-            //Si 3.Gabon 
-            if (pojoUssd.getMessage().equals("3") && sessionussd.getLastsep().equals("237*100*7*1*2") && sessionussd.getType().equals("2")) {
-                sessionussd.setLastsep("237*100*7*1*2*3");
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*5") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
+                sessionussd.setDestinataire(pojoUssd.getMessage());
                 ussdRepository.save(sessionussd);
-                map.put("message", "Selectioner la banque~1.BGFI Gabon~0.Retour ");
+                map.put("message", "Entrer le montant a transferer~0.Annuler ");
                 map.put("command", "1");
                 return map;
+            }
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*5") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
+                response = new Responses();
+                try {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                } catch (Exception e) {
+                    map.put("message", "Le montant doit contenir uniquement les chiffres~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                response = ussdservice.Solde_transfert_walet_Banque_USSD(sessionussd);
+                System.out.println(response.getSucces() + " " + response.getMsg());
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -3) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 18) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 1) {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                    ussdRepository.save(sessionussd);
+                    map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+            }
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*5") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le mot de passe pour confirmer la transaction~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*5") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
+                sessionussd.setCodesecret(pojoUssd.getMessage());
+                response = ussdservice.Valide_Transfert_walet_Banque_USSD(sessionussd);
+
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -6) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -22) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == 1) {
+                    sessionussd.setCodesecret("OK");
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg());
+                    map.put("command", "0");
+                    return map;
+                }
+
+            }
+
+            //Operation Wallet UBC CAMEROUN........................................................................................
+            if (pojoUssd.getMessage().equals("6") && sessionussd.getLastsep().equals("237*100*7*1*2*1") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*2*1*6");
+                Waletbancairegimac waletbancairegimac = waletbancaireRepository.findByWaletbancairegimac(Integer.parseInt(sessionussd.getPays()), "Umobile");
+                sessionussd.setWallet(waletbancairegimac.getCodeWalet());
+                System.out.println(waletbancairegimac.getCodeWalet());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Saisir le numero de telephone recipiendaire~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*6") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
+                sessionussd.setDestinataire(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le montant a transferer~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*6") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
+                response = new Responses();
+                try {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                } catch (Exception e) {
+                    map.put("message", "Le montant doit contenir uniquement les chiffres~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                response = ussdservice.Solde_transfert_walet_Banque_USSD(sessionussd);
+                System.out.println(response.getSucces() + " " + response.getMsg());
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -3) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 18) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 1) {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                    ussdRepository.save(sessionussd);
+                    map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+            }
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*6") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le mot de passe pour confirmer la transaction~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*6") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
+                sessionussd.setCodesecret(pojoUssd.getMessage());
+                response = ussdservice.Valide_Transfert_walet_Banque_USSD(sessionussd);
+
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -6) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -22) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == 1) {
+                    sessionussd.setCodesecret("OK");
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg());
+                    map.put("command", "0");
+                    return map;
+                }
+
+            }
+
+            //Si 2.Congo----------------------------------------CONGO-------------------------------------------------------------------------------------------------------- 
+            if (pojoUssd.getMessage().equals("2") && sessionussd.getLastsep().equals("237*100*7*1*2") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*2*2");
+                sessionussd.setPays("2");
+                ussdRepository.save(sessionussd);
+                map.put("message", "CONGO/Selectioner la banque~1.BCI Mobile~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+
+            //Operation Wallet BCI Mobile CONGO........................................................................................
+            if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*7*1*2*2") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*2*2*1");
+                Waletbancairegimac waletbancairegimac = waletbancaireRepository.findByWaletbancairegimac(Integer.parseInt(sessionussd.getPays()), "BCI Mobile");
+                sessionussd.setWallet(waletbancairegimac.getCodeWalet());
+                System.out.println(waletbancairegimac.getCodeWalet());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Saisir le numero de telephone recipiendaire~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*2*1") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
+                sessionussd.setDestinataire(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le montant a transferer~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*2*1") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
+                response = new Responses();
+                try {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                } catch (Exception e) {
+                    map.put("message", "Le montant doit contenir uniquement les chiffres~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                response = ussdservice.Solde_transfert_walet_Banque_USSD(sessionussd);
+                System.out.println(response.getSucces() + " " + response.getMsg());
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -3) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 18) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 1) {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                    ussdRepository.save(sessionussd);
+                    map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+            }
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*2*1") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le mot de passe pour confirmer la transaction~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*2*1") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
+                sessionussd.setCodesecret(pojoUssd.getMessage());
+                response = ussdservice.Valide_Transfert_walet_Banque_USSD(sessionussd);
+
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -6) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -22) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == 1) {
+                    sessionussd.setCodesecret("OK");
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg());
+                    map.put("command", "0");
+                    return map;
+                }
+
+            }
+
+            //Si 3.Gabon ------------------------------------------GABON-------------------------------------------------------------------------------------
+            if (pojoUssd.getMessage().equals("3") && sessionussd.getLastsep().equals("237*100*7*1*2") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*2*3");
+                sessionussd.setPays("3");
+                ussdRepository.save(sessionussd);
+                map.put("message", "GABON/Selectioner la banque~1.BGFI Gabon~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+
+            //Operation Wallet BGFI Mobile GABON........................................................................................
+            if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*7*1*2*3") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*1*2*3*1");
+                Waletbancairegimac waletbancairegimac = waletbancaireRepository.findByWaletbancairegimac(Integer.parseInt(sessionussd.getPays()), "BGFI Mobile");
+                sessionussd.setWallet(waletbancairegimac.getCodeWalet());
+                System.out.println(waletbancairegimac.getCodeWalet());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Saisir le numero de telephone recipiendaire~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*3*1") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
+                sessionussd.setDestinataire(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le montant a transferer~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*3*1") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
+                response = new Responses();
+                try {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                } catch (Exception e) {
+                    map.put("message", "Le montant doit contenir uniquement les chiffres~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                response = ussdservice.Solde_transfert_walet_Banque_USSD(sessionussd);
+                System.out.println(response.getSucces() + " " + response.getMsg());
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -3) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 18) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 1) {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                    ussdRepository.save(sessionussd);
+                    map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+            }
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*3*1") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le mot de passe pour confirmer la transaction~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*3*1") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
+                sessionussd.setCodesecret(pojoUssd.getMessage());
+                response = ussdservice.Valide_Transfert_walet_Banque_USSD(sessionussd);
+
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -6) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -22) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == 1) {
+                    sessionussd.setCodesecret("OK");
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg());
+                    map.put("command", "0");
+                    return map;
+                }
+
             }
 
             //retour au menu Gimac***********************************************************------------------------//
