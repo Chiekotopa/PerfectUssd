@@ -639,7 +639,8 @@ public class UssdService extends Thread {
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
-        String url = "https://api.kakotel.com/api-gimacpay_mobile.php?action=Solde_transfert_walet_Banque_USSD&Code_clientExpediteur="+s.getMsisdn().substring(3)+"&Code_clientDestinataire="+s.getDestinataire()+"&Montant="+s.getMontant()+"&WalletDestinataire="+s.getWallet()+"";
+        String url = "https://api.kakotel.com/api-gimacpay_mobile.php?action=Solde_transfert_walet_Banque_USSD&Code_clientExpediteur="
+                +s.getMsisdn().substring(3)+"&Code_clientDestinataire="+s.getDestinataire()+"&Montant="+s.getMontant()+"&WalletDestinataire="+s.getWallet()+"";
         response = restTemplate.getForObject(url, Responses.class, response);
         return response;
     }
@@ -649,7 +650,32 @@ public class UssdService extends Thread {
         headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
         headers.set(HttpHeaders.ACCEPT, "application/json");
         HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
-        String url = "https://api.kakotel.com/api-gimacpay_mobile.php?action=Valide_Transfert_walet_Banque_USSD&Code_clientExpediteur="+s.getMsisdn().substring(3)+"&Code_clientDestinataire="+s.getDestinataire()+"&Montant="+s.getMontant()+"&WalletDestinataire="+s.getWallet()+"&ReferenceTransaction="+s.getReference()+"&CodeSecurite="+s.getCodesecret()+"";
+        String url = "https://api.kakotel.com/api-gimacpay_mobile.php?action=Valide_Transfert_walet_Banque_USSD&Code_clientExpediteur="
+                +s.getMsisdn().substring(3)+"&Code_clientDestinataire="+s.getDestinataire()+"&Montant="+s.getMontant()
+                +"&WalletDestinataire="+s.getWallet()+"&ReferenceTransaction="+s.getReference()+"&CodeSecurite="+s.getCodesecret()+"";
+        response = restTemplate.getForObject(url, Responses.class, response);
+        return response;
+    }
+      
+       public Responses Solde_paiement_Marchand_USSD(Sessionussd s) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+        String url = "https://api.kakotel.com/api-gimacpay_mobile.php?action=Solde_paiement_Marchand_USSD&Code_clientExpediteur="+s.getMsisdn().substring(3)+
+                "&CodeMarchand="+s.getDestinataire()+"&Montant="+s.getMontant()+"&WalletMarchand="+s.getWallet()+"";
+        response = restTemplate.getForObject(url, Responses.class, response);
+        return response;
+    }
+       
+       
+        public Responses Valide_paiement_Marchand_USSD(Sessionussd s) {
+        Responses response = new Responses();
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+        headers.set(HttpHeaders.ACCEPT, "application/json");
+        HttpEntity<Responses> entity = new HttpEntity<>(response, headers);
+        String url = "https://api.kakotel.com/api-gimacpay_mobile.php?action=Valide_paiement_Marchand_USSD&Code_clientExpediteur="+s.getMsisdn().substring(3)+"&CodeMarchand="+s.getDestinataire()+"&Montant="+s.getMontant()+"&WalletMarchand="+s.getWallet()+
+                "&ReferenceTransaction="+s.getReference()+"&CodeSecurite="+s.getCodesecret()+"";
         response = restTemplate.getForObject(url, Responses.class, response);
         return response;
     }
