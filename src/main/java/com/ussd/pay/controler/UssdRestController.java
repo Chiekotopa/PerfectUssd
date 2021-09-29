@@ -4060,6 +4060,9 @@ public class UssdRestController {
                 }
 
             }
+            
+            
+            
 
             //Transfert banque-..........................TRANSFERT BANQUE..........................................................................
             //etape Selection du pays
@@ -4097,10 +4100,18 @@ public class UssdRestController {
             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*1") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
                 sessionussd.setDestinataire(pojoUssd.getMessage());
                 ussdRepository.save(sessionussd);
-                map.put("message", "Entrer le montant a transferer~0.Annuler ");
+                map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
                 map.put("command", "1");
                 return map;
             }
+              
+              if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*1") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le montant a transferer~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }          
 
             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*1") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
                 response = new Responses();
@@ -4134,19 +4145,13 @@ public class UssdRestController {
                 if (response.getSucces() == 1) {
                     sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
                     ussdRepository.save(sessionussd);
-                    map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                    map.put("message", response.getMsg()+"~0.Annuler ");
                     map.put("command", "1");
                     return map;
                 }
             }
 
-            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*1") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
-                sessionussd.setReference(pojoUssd.getMessage());
-                ussdRepository.save(sessionussd);
-                map.put("message", "Entrer le mot de passe pour confirmer la transaction~0.Annuler ");
-                map.put("command", "1");
-                return map;
-            }
+            
 
             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*1") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
                 sessionussd.setCodesecret(pojoUssd.getMessage());
@@ -4189,13 +4194,21 @@ public class UssdRestController {
                 return map;
             }
 
-            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*2") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
+           if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*2") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
                 sessionussd.setDestinataire(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+              
+              if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*2") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
                 ussdRepository.save(sessionussd);
                 map.put("message", "Entrer le montant a transferer~0.Annuler ");
                 map.put("command", "1");
                 return map;
-            }
+            }        
 
             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*2") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
                 response = new Responses();
@@ -4229,19 +4242,13 @@ public class UssdRestController {
                 if (response.getSucces() == 1) {
                     sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
                     ussdRepository.save(sessionussd);
-                    map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                    map.put("message", response.getMsg()+ "~0.Annuler ");
                     map.put("command", "1");
                     return map;
                 }
             }
 
-            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*2") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
-                sessionussd.setReference(pojoUssd.getMessage());
-                ussdRepository.save(sessionussd);
-                map.put("message", "Entrer le mot de passe pour confirmer la transaction~0.Annuler ");
-                map.put("command", "1");
-                return map;
-            }
+           
 
             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*2") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
                 sessionussd.setCodesecret(pojoUssd.getMessage());
@@ -4284,13 +4291,21 @@ public class UssdRestController {
                 return map;
             }
 
-            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*3") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
+             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*3") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
                 sessionussd.setDestinataire(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+              
+              if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*3") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
                 ussdRepository.save(sessionussd);
                 map.put("message", "Entrer le montant a transferer~0.Annuler ");
                 map.put("command", "1");
                 return map;
-            }
+            }        
 
             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*3") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
                 response = new Responses();
@@ -4324,20 +4339,13 @@ public class UssdRestController {
                 if (response.getSucces() == 1) {
                     sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
                     ussdRepository.save(sessionussd);
-                    map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                    map.put("message", response.getMsg()+ "~0.Annuler ");
                     map.put("command", "1");
                     return map;
                 }
             }
 
-            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*3") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
-                sessionussd.setReference(pojoUssd.getMessage());
-                ussdRepository.save(sessionussd);
-                map.put("message", "Entrer le mot de passe pour confirmer la transaction~0.Annuler ");
-                map.put("command", "1");
-                return map;
-            }
-
+           
             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*3") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
                 sessionussd.setCodesecret(pojoUssd.getMessage());
                 response = ussdservice.Valide_Transfert_walet_Banque_USSD(sessionussd);
@@ -4382,10 +4390,18 @@ public class UssdRestController {
             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*4") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
                 sessionussd.setDestinataire(pojoUssd.getMessage());
                 ussdRepository.save(sessionussd);
-                map.put("message", "Entrer le montant a transferer~0.Annuler ");
+                map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
                 map.put("command", "1");
                 return map;
             }
+              
+              if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*4") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le montant a transferer~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }        
 
             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*4") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
                 response = new Responses();
@@ -4419,19 +4435,13 @@ public class UssdRestController {
                 if (response.getSucces() == 1) {
                     sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
                     ussdRepository.save(sessionussd);
-                    map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                    map.put("message",response.getMsg()+"~0.Annuler ");
                     map.put("command", "1");
                     return map;
                 }
             }
 
-            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*4") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
-                sessionussd.setReference(pojoUssd.getMessage());
-                ussdRepository.save(sessionussd);
-                map.put("message", "Entrer le mot de passe pour confirmer la transaction~0.Annuler ");
-                map.put("command", "1");
-                return map;
-            }
+            
 
             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*4") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
                 sessionussd.setCodesecret(pojoUssd.getMessage());
@@ -4474,13 +4484,21 @@ public class UssdRestController {
                 return map;
             }
 
-            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*5") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
+             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*5") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
                 sessionussd.setDestinataire(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+              
+              if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*5") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
                 ussdRepository.save(sessionussd);
                 map.put("message", "Entrer le montant a transferer~0.Annuler ");
                 map.put("command", "1");
                 return map;
-            }
+            }        
 
             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*5") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
                 response = new Responses();
@@ -4514,19 +4532,13 @@ public class UssdRestController {
                 if (response.getSucces() == 1) {
                     sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
                     ussdRepository.save(sessionussd);
-                    map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                    map.put("message", response.getMsg()+ "~0.Annuler ");
                     map.put("command", "1");
                     return map;
                 }
             }
 
-            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*5") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
-                sessionussd.setReference(pojoUssd.getMessage());
-                ussdRepository.save(sessionussd);
-                map.put("message", "Entrer le mot de passe pour confirmer la transaction~0.Annuler ");
-                map.put("command", "1");
-                return map;
-            }
+            
 
             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*5") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
                 sessionussd.setCodesecret(pojoUssd.getMessage());
@@ -4572,10 +4584,18 @@ public class UssdRestController {
             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*6") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
                 sessionussd.setDestinataire(pojoUssd.getMessage());
                 ussdRepository.save(sessionussd);
-                map.put("message", "Entrer le montant a transferer~0.Annuler ");
+                map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
                 map.put("command", "1");
                 return map;
             }
+              
+              if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*6") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le montant a transferer~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }        
 
             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*6") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
                 response = new Responses();
@@ -4609,19 +4629,13 @@ public class UssdRestController {
                 if (response.getSucces() == 1) {
                     sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
                     ussdRepository.save(sessionussd);
-                    map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                    map.put("message", response.getMsg()+"~0.Annuler ");
                     map.put("command", "1");
                     return map;
                 }
             }
 
-            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*6") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
-                sessionussd.setReference(pojoUssd.getMessage());
-                ussdRepository.save(sessionussd);
-                map.put("message", "Entrer le mot de passe pour confirmer la transaction~0.Annuler ");
-                map.put("command", "1");
-                return map;
-            }
+            
 
             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*1*6") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
                 sessionussd.setCodesecret(pojoUssd.getMessage());
@@ -4674,13 +4688,21 @@ public class UssdRestController {
                 return map;
             }
 
-            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*2*1") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
+             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*2*1") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
                 sessionussd.setDestinataire(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+              
+              if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*2*1") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
                 ussdRepository.save(sessionussd);
                 map.put("message", "Entrer le montant a transferer~0.Annuler ");
                 map.put("command", "1");
                 return map;
-            }
+            }        
 
             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*2*1") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
                 response = new Responses();
@@ -4714,19 +4736,13 @@ public class UssdRestController {
                 if (response.getSucces() == 1) {
                     sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
                     ussdRepository.save(sessionussd);
-                    map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                    map.put("message", response.getMsg()+ "~0.Annuler ");
                     map.put("command", "1");
                     return map;
                 }
             }
 
-            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*2*1") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
-                sessionussd.setReference(pojoUssd.getMessage());
-                ussdRepository.save(sessionussd);
-                map.put("message", "Entrer le mot de passe pour confirmer la transaction~0.Annuler ");
-                map.put("command", "1");
-                return map;
-            }
+            
 
             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*2*1") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
                 sessionussd.setCodesecret(pojoUssd.getMessage());
@@ -4782,10 +4798,18 @@ public class UssdRestController {
             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*3*1") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
                 sessionussd.setDestinataire(pojoUssd.getMessage());
                 ussdRepository.save(sessionussd);
-                map.put("message", "Entrer le montant a transferer~0.Annuler ");
+                map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
                 map.put("command", "1");
                 return map;
             }
+              
+              if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*3*1") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le montant a transferer~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }        
 
             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*3*1") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
                 response = new Responses();
@@ -4819,19 +4843,13 @@ public class UssdRestController {
                 if (response.getSucces() == 1) {
                     sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
                     ussdRepository.save(sessionussd);
-                    map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                    map.put("message", response.getMsg()+ "~0.Annuler ");
                     map.put("command", "1");
                     return map;
                 }
             }
 
-            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*3*1") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
-                sessionussd.setReference(pojoUssd.getMessage());
-                ussdRepository.save(sessionussd);
-                map.put("message", "Entrer le mot de passe pour confirmer la transaction~0.Annuler ");
-                map.put("command", "1");
-                return map;
-            }
+            
 
             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*3*1") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
                 sessionussd.setCodesecret(pojoUssd.getMessage());
