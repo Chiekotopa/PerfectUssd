@@ -2886,6 +2886,9 @@ public class UssdRestController {
                 }
 
             }
+            
+            
+            
 
             //Si GimacPAY est selectionne par l'utilisateur--------------------------------------------------------------------------------------------------------
             if (pojoUssd.getMessage().equals("7") && sessionussd.getLastsep().equals("237*100") && sessionussd.getType().equals("2")) {
@@ -2896,7 +2899,21 @@ public class UssdRestController {
                 return map;
             }
             
-             //Paiement marchand Gimac **************************************************************************************************************************************
+            
+            /**
+             *  //Paiement marchand Gimac **************************************************************************************************************************************
+             * 
+             * */            
+          
+
+            if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*5") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*2");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Paiement marchand/Selectioner le pays~1.Cameroun~2.Congo~3.Gabon~4.Republique Centrafricaine~5.Tchad~0.Retourr ");
+                map.put("command", "1");
+                return map;
+            }
+            //-----*-*--------
             if (pojoUssd.getMessage().equals("2") && sessionussd.getLastsep().equals("237*100*7") && sessionussd.getType().equals("2")) {
                 sessionussd.setLastsep("237*100*7*2");
                 ussdRepository.save(sessionussd);
@@ -2916,26 +2933,34 @@ public class UssdRestController {
                 return map;
             }
             
-              //Operation Wallet ORANGE MONEY pour Marchand.........................................................................
+              //Operation Wallet ORANGE MONEY pour Marchand.................................................................................................
             if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*7*2*1") && sessionussd.getType().equals("2")) {
                 sessionussd.setLastsep("237*100*7*2*1*1");
                 Waletmobilegimac waletmobilegimac = waletmobilRepository.findByWaletmobilegimac(Integer.parseInt(sessionussd.getPays()), "Orange Money");
                 sessionussd.setWallet(waletmobilegimac.getCodeWalet());
                 System.out.println(waletmobilegimac.getCodeWalet());
                 ussdRepository.save(sessionussd);
-                map.put("message", "Saisir le code du marchand~0.Annuler ");
+                map.put("message", "Saisir le code marchand~0.Annuler ");
                 map.put("command", "1");
                 return map;
             }
             
             
-             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*1*1") && sessionussd.getType().equals("2") && sessionussd.getDestinataire()== null) {
+           if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*1*1") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
                 sessionussd.setDestinataire(pojoUssd.getMessage());
                 ussdRepository.save(sessionussd);
-                map.put("message", "Entrer le montant du service a payez~0.Annuler ");
+                map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
                 map.put("command", "1");
                 return map;
             }
+            
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*1*1") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le montant a transferer~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }          
             
              if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*1*1") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
                 response = new Responses();
@@ -2968,22 +2993,13 @@ public class UssdRestController {
 
                 if (response.getSucces() == 1) {
                     sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
-                   
                     ussdRepository.save(sessionussd);
-                    map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                    map.put("message", response.getMsg()+ "~0.Annuler ");
                     map.put("command", "1");
                     return map;
                 }
             }
-             
-             
-              if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*1*1") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
-                sessionussd.setReference(pojoUssd.getMessage());
-                ussdRepository.save(sessionussd);
-                map.put("message", "Entrer le mot de passe pour confirmer la transaction~0.Annuler ");
-                map.put("command", "1");
-                return map;
-            }
+                   
               
 
             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*1*1") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
@@ -3015,12 +3031,929 @@ public class UssdRestController {
 
             }
             
-                     
             
+             //Operation Wallet MTN MoMo pour Marchand........................................................................................
+            if (pojoUssd.getMessage().equals("2") && sessionussd.getLastsep().equals("237*100*7*2*1") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*2*1*2");
+                Waletmobilegimac waletmobilegimac = waletmobilRepository.findByWaletmobilegimac(Integer.parseInt(sessionussd.getPays()), "MTN MoMo");
+                sessionussd.setWallet(waletmobilegimac.getCodeWalet());
+                System.out.println(waletmobilegimac.getCodeWalet());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Saisir le code marchand~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
             
+              if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*1*2") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
+                sessionussd.setDestinataire(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+              
+              if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*1*2") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le montant du service a payer~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }          
+
+       
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*1*2") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
+                response = new Responses();
+                try {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                } catch (Exception e) {
+                    map.put("message", "Le montant doit contenir uniquement les chiffres~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                response = ussdservice.Solde_paiement_Marchand_USSD(sessionussd);
+                System.out.println(response.getSucces() + " " + response.getMsg());
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -3) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 18) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 1) {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg()+"~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+            }
+
             
 
-            //Transfert wallet Gimac***************************************************************************************************************************************************************
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*1*2") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
+                sessionussd.setCodesecret(pojoUssd.getMessage());
+                response = ussdservice.Valide_paiement_Marchand_USSD(sessionussd);
+
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -6) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -22) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == 1) {
+                    sessionussd.setCodesecret("OK");
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg());
+                    map.put("command", "0");
+                    return map;
+                }
+
+            }
+            
+             //Operation Wallet YUP de SG Marchand........................................................................................
+            if (pojoUssd.getMessage().equals("3") && sessionussd.getLastsep().equals("237*100*7*2*1") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*2*1*3");
+                Waletmobilegimac waletmobilegimac = waletmobilRepository.findByWaletmobilegimac(Integer.parseInt(sessionussd.getPays()), "YUP de SG");
+                sessionussd.setWallet(waletmobilegimac.getCodeWalet());
+                System.out.println(waletmobilegimac.getCodeWalet());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Saisir le code marchand~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+            
+            
+             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*1*3") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
+                sessionussd.setDestinataire(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+              
+              if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*1*3") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le montant du service a payer~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }          
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*1*3") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
+                response = new Responses();
+                try {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                } catch (Exception e) {
+                    map.put("message", "Le montant doit contenir uniquement les chiffres~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                response = ussdservice.Solde_paiement_Marchand_USSD(sessionussd);
+                System.out.println(response.getSucces() + " " + response.getMsg());
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -3) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 18) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 1) {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg()+"~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+            }
+
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*1*3") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
+                sessionussd.setCodesecret(pojoUssd.getMessage());
+                response = ussdservice.Valide_paiement_Marchand_USSD(sessionussd);
+
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -6) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -22) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == 1) {
+                    sessionussd.setCodesecret("OK");
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg());
+                    map.put("command", "0");
+                    return map;
+                }
+
+            }
+            
+            //Si 2.Congo Marchand----------------------CONGO---------------------------------------------------------------------------------------------------------------------------------------------- 
+            if (pojoUssd.getMessage().equals("2") && sessionussd.getLastsep().equals("237*100*7*2") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*2*2");
+                sessionussd.setPays("2");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Congo/Selectioner la wallet~1.Airtel Money~2.MTN MoMo~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+
+            //Operation Wallet Airtel Money Congo Marchand.........................................................................
+            if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*7*2*2") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*2*2*1");
+                Waletmobilegimac waletmobilegimac = waletmobilRepository.findByWaletmobilegimac(Integer.parseInt(sessionussd.getPays()), "Airtel Money");
+                sessionussd.setWallet(waletmobilegimac.getCodeWalet());
+                System.out.println(waletmobilegimac.getCodeWalet());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Saisir le code marchand~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+
+             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*2*1") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
+                sessionussd.setDestinataire(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+              
+              if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*2*1") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le montant du service a payer~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }          
+
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*2*1") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
+                response = new Responses();
+                try {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                } catch (Exception e) {
+                    map.put("message", "Le montant doit contenir uniquement les chiffres~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                response = ussdservice.Solde_paiement_Marchand_USSD(sessionussd);
+                System.out.println(response.getSucces() + " " + response.getMsg());
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -3) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 18) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 1) {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg()+"~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+            }
+
+          
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*2*1") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
+                sessionussd.setCodesecret(pojoUssd.getMessage());
+                response = ussdservice.Valide_paiement_Marchand_USSD(sessionussd);
+
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -6) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -22) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == 1) {
+                    sessionussd.setCodesecret("OK");
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg());
+                    map.put("command", "0");
+                    return map;
+                }
+
+            }
+
+            //Operation Wallet MTN MoMo Congo marchand........................................................................................
+            if (pojoUssd.getMessage().equals("2") && sessionussd.getLastsep().equals("237*100*7*2*2") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*2*2*2");
+                Waletmobilegimac waletmobilegimac = waletmobilRepository.findByWaletmobilegimac(Integer.parseInt(sessionussd.getPays()), "MTN MoMo");
+                sessionussd.setWallet(waletmobilegimac.getCodeWalet());
+                System.out.println(waletmobilegimac.getCodeWalet());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Saisir le code marchand~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+
+             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*2*2") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
+                sessionussd.setDestinataire(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+              
+              if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*2*2") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le montant du service a payer~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }          
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*2*2") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
+                response = new Responses();
+                try {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                } catch (Exception e) {
+                    map.put("message", "Le montant doit contenir uniquement les chiffres~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                response = ussdservice.Solde_paiement_Marchand_USSD(sessionussd);
+                System.out.println(response.getSucces() + " " + response.getMsg());
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -3) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 18) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 1) {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg()+"~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+            }
+
+           
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*2*2") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
+                sessionussd.setCodesecret(pojoUssd.getMessage());
+                response = ussdservice.Valide_paiement_Marchand_USSD(sessionussd);
+
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -6) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -22) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == 1) {
+                    sessionussd.setCodesecret("OK");
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg());
+                    map.put("command", "0");
+                    return map;
+                }
+
+            }
+
+            //Si 3.Gabon marchand----------------------GABON----------------------------------------------------------------------------------------------------------------------------------------------  
+            if (pojoUssd.getMessage().equals("3") && sessionussd.getLastsep().equals("237*100*7*2") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*2*3");
+                sessionussd.setPays("3");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Gabon/Selectioner la wallet~1.Airtel Money~2.Moov Money~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+
+            //Operation Wallet Airtel Money GABON marchand.........................................................................
+            if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*7*2*3") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*2*3*1");
+                Waletmobilegimac waletmobilegimac = waletmobilRepository.findByWaletmobilegimac(Integer.parseInt(sessionussd.getPays()), "Airtel Money");
+                sessionussd.setWallet(waletmobilegimac.getCodeWalet());
+                System.out.println(waletmobilegimac.getCodeWalet());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Saisir le code marchand~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+
+              if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*3*1") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
+                sessionussd.setDestinataire(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+              
+              if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*3*1") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le montant du service a payer~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }          
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*3*1") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
+                response = new Responses();
+                try {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                } catch (Exception e) {
+                    map.put("message", "Le montant doit contenir uniquement les chiffres~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                response = ussdservice.Solde_paiement_Marchand_USSD(sessionussd);
+                System.out.println(response.getSucces() + " " + response.getMsg());
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -3) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 18) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 1) {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg()+ "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+            }
+
+           
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*3*1") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
+                sessionussd.setCodesecret(pojoUssd.getMessage());
+                response = ussdservice.Valide_paiement_Marchand_USSD(sessionussd);
+
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -6) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -22) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == 1) {
+                    sessionussd.setCodesecret("OK");
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg());
+                    map.put("command", "0");
+                    return map;
+                }
+
+            }
+
+            //Operation Wallet Moov Money GABON marchand........................................................................................
+            if (pojoUssd.getMessage().equals("2") && sessionussd.getLastsep().equals("237*100*7*2*3") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*2*3*2");
+                Waletmobilegimac waletmobilegimac = waletmobilRepository.findByWaletmobilegimac(Integer.parseInt(sessionussd.getPays()), "Moov Money");
+                sessionussd.setWallet(waletmobilegimac.getCodeWalet());
+                System.out.println(waletmobilegimac.getCodeWalet());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Saisir le code marchand~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+
+             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*3*2") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
+                sessionussd.setDestinataire(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+              
+              if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*3*2") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le montant du service a payer~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }          
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*3*2") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
+                response = new Responses();
+                try {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                } catch (Exception e) {
+                    map.put("message", "Le montant doit contenir uniquement les chiffres~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                response = ussdservice.Solde_paiement_Marchand_USSD(sessionussd);
+                System.out.println(response.getSucces() + " " + response.getMsg());
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -3) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 18) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 1) {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg()+ "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+            }
+
+         
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*3*2") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
+                sessionussd.setCodesecret(pojoUssd.getMessage());
+                response = ussdservice.Valide_paiement_Marchand_USSD(sessionussd);
+
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -6) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -22) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == 1) {
+                    sessionussd.setCodesecret("OK");
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg());
+                    map.put("command", "0");
+                    return map;
+                }
+
+            }
+
+            //Si 4.Republique Centrafricaine marchand----------------------REPUBLIQUE CENTREAFRICAINE----------------------------------------------------------------------------------------------------------------------------------------------  
+            if (pojoUssd.getMessage().equals("4") && sessionussd.getLastsep().equals("237*100*7*2") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*2*4");
+                sessionussd.setPays("4");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Republique Centrafricaine/Selectioner la wallet~1.Orange Money~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+
+            //Operation Wallet Orange Money Republique Centrafricaine........................................................................................
+            if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*7*2*4") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*2*4*1");
+                Waletmobilegimac waletmobilegimac = waletmobilRepository.findByWaletmobilegimac(Integer.parseInt(sessionussd.getPays()), "Orange Money");
+                sessionussd.setWallet(waletmobilegimac.getCodeWalet());
+                System.out.println(waletmobilegimac.getCodeWalet());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Saisir le code marchand~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*4*1") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
+                sessionussd.setDestinataire(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+              
+              if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*4*1") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le montant du service a payer~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }          
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*4*1") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
+                response = new Responses();
+                try {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                } catch (Exception e) {
+                    map.put("message", "Le montant doit contenir uniquement les chiffres~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                response = ussdservice.Solde_paiement_Marchand_USSD(sessionussd);
+                System.out.println(response.getSucces() + " " + response.getMsg());
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -3) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 18) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 1) {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg()+ "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+            }
+
+            
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*4*1") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
+                sessionussd.setCodesecret(pojoUssd.getMessage());
+                response = ussdservice.Valide_paiement_Marchand_USSD(sessionussd);
+
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -6) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -22) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == 1) {
+                    sessionussd.setCodesecret("OK");
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg());
+                    map.put("command", "0");
+                    return map;
+                }
+
+            }
+
+            //Si 5.Tchad marchand-----------------------------TCHAD-----------------------------------------------------------------------------------------------------
+            if (pojoUssd.getMessage().equals("5") && sessionussd.getLastsep().equals("237*100*7*2") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*2*5");
+                sessionussd.setPays("5");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Tchad/Selectioner la wallet~1.Airtel Money~2.Moov Money~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+
+            //Operation Wallet Airtel Money tchad. marchand.......................................................................................
+            if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*7*2*5") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*2*5*1");
+                Waletmobilegimac waletmobilegimac = waletmobilRepository.findByWaletmobilegimac(Integer.parseInt(sessionussd.getPays()), "Airtel Money");
+                sessionussd.setWallet(waletmobilegimac.getCodeWalet());
+                System.out.println(waletmobilegimac.getCodeWalet());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Saisir le code marchand~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+
+             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*5*1") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
+                sessionussd.setDestinataire(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+              
+              if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*5*1") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le montant du service a payer~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }          
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*5*1") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
+                response = new Responses();
+                try {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                } catch (Exception e) {
+                    map.put("message", "Le montant doit contenir uniquement les chiffres~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                response = ussdservice.Solde_paiement_Marchand_USSD(sessionussd);
+                System.out.println(response.getSucces() + " " + response.getMsg());
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -3) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 18) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 1) {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg()+ "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+            }
+
+            
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*5*1") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
+                sessionussd.setCodesecret(pojoUssd.getMessage());
+                response = ussdservice.Valide_paiement_Marchand_USSD(sessionussd);
+
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -6) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -22) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == 1) {
+                    sessionussd.setCodesecret("OK");
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg());
+                    map.put("command", "0");
+                    return map;
+                }
+
+            }
+
+            //Operation Wallet Moov Money tchad marchand........................................................................................
+            if (pojoUssd.getMessage().equals("2") && sessionussd.getLastsep().equals("237*100*7*2*5") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*2*5*2");
+                Waletmobilegimac waletmobilegimac = waletmobilRepository.findByWaletmobilegimac(Integer.parseInt(sessionussd.getPays()), "Airtel Money");
+                sessionussd.setWallet(waletmobilegimac.getCodeWalet());
+                System.out.println(waletmobilegimac.getCodeWalet());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Saisir le code marchand~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+
+             if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*5*2") && sessionussd.getType().equals("2") && sessionussd.getDestinataire() == null) {
+                sessionussd.setDestinataire(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer la reference pour identifier la transaction~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }
+              
+              if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*5*2") && sessionussd.getType().equals("2") && sessionussd.getReference() == null) {
+                sessionussd.setReference(pojoUssd.getMessage());
+                ussdRepository.save(sessionussd);
+                map.put("message", "Entrer le montant du service a payer~0.Annuler ");
+                map.put("command", "1");
+                return map;
+            }          
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*5*2") && sessionussd.getType().equals("2") && sessionussd.getMontant() == null) {
+                response = new Responses();
+                try {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                } catch (Exception e) {
+                    map.put("message", "Le montant doit contenir uniquement les chiffres~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                response = ussdservice.Solde_paiement_Marchand_USSD(sessionussd);
+                System.out.println(response.getSucces() + " " + response.getMsg());
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -3) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 18) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+
+                if (response.getSucces() == 1) {
+                    sessionussd.setMontant(Double.valueOf(pojoUssd.getMessage()));
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg()+"~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+            }
+
+            
+
+            if (!pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*5*2") && sessionussd.getType().equals("2") && sessionussd.getCodesecret() == null) {
+                sessionussd.setCodesecret(pojoUssd.getMessage());
+                response = ussdservice.Valide_paiement_Marchand_USSD(sessionussd);
+
+                if (response.getSucces() == -2) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -6) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == -22) {
+                    map.put("message", response.getMsg() + "~0.Annuler ");
+                    map.put("command", "1");
+                    return map;
+                }
+                if (response.getSucces() == 1) {
+                    sessionussd.setCodesecret("OK");
+                    ussdRepository.save(sessionussd);
+                    map.put("message", response.getMsg());
+                    map.put("command", "0");
+                    return map;
+                }
+
+            }
+                         
+            
+            
+            /**
+             * 
+             * //Transfert wallet Gimac***************************************************************************************************************************************************************
+             **/  
             if (pojoUssd.getMessage().equals("1") && sessionussd.getLastsep().equals("237*100*7") && sessionussd.getType().equals("2")) {
                 sessionussd.setLastsep("237*100*7*1");
                 ussdRepository.save(sessionussd);
@@ -4080,7 +5013,7 @@ public class UssdRestController {
                 sessionussd.setLastsep("237*100*7*1*2*1");
                 sessionussd.setPays("1");
                 ussdRepository.save(sessionussd);
-                map.put("message", "CAMEROUN/Selectioner la banque~1.BICEC~2.CBC~3.CCA Bank~4.Express Union~5.La Régionale~6.UBC~0.Retour ");
+                map.put("message", "CAMEROUN/Selectioner la banque~1.BICEC~2.CBC~3.CCA Bank~4.Express Union~5.La Regionale~6.UBC~0.Retour ");
                 map.put("command", "1");
                 return map;
             }
@@ -4879,8 +5812,52 @@ public class UssdRestController {
                 }
 
             }
+            /**
+             * 
+             * //retour au menu Gimac***********************************************************------------------------//
+             */
+            //////retour au menu selecttion pays a partir de l'option paiement marchand selectionner
+              
+            if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*1") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*2");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Paiement marchand/Selectioner le pays~1.Cameroun~2.Congo~3.Gabon~4.Republique Centrafricaine~5.Tchad~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+            if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*2") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*2");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Paiement marchand/Selectioner le pays~1.Cameroun~2.Congo~3.Gabon~4.Republique Centrafricaine~5.Tchad~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
 
-            //retour au menu Gimac***********************************************************------------------------//
+            if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*3") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*2");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Paiement marchand/Selectioner le pays~1.Cameroun~2.Congo~3.Gabon~4.Republique Centrafricaine~5.Tchad~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+
+            if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2*4") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7*2");
+                ussdRepository.save(sessionussd);
+                map.put("message", "Paiement marchand/Selectioner le pays~1.Cameroun~2.Congo~3.Gabon~4.Republique Centrafricaine~5.Tchad~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+            
+            //retour au menu GimacPay
+            if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*2") && sessionussd.getType().equals("2")) {
+                sessionussd.setLastsep("237*100*7");
+                ussdRepository.save(sessionussd);
+                map.put("message", "GimacPay~1.Transfert wallet~2.Paiement marchand~3.Paiement de facture~4.Retrait sans carte~0.Retour ");
+                map.put("command", "1");
+                return map;
+            }
+            
             ////retour au menu selecttion pays a partir de l'option wallet selectionner
             if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*1*1") && sessionussd.getType().equals("2")) {
                 sessionussd.setLastsep("237*100*7*1*1");
@@ -4921,7 +5898,7 @@ public class UssdRestController {
                 return map;
             }
 
-            //retour au menu selecttion pays a partir de  l'option Banque selectionner
+            //retour au menu selection pays a partir de  l'option Banque selectionner
             if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7*1*2*3") && sessionussd.getType().equals("2")) {
                 sessionussd.setLastsep("237*100*7*1*2");
                 ussdRepository.save(sessionussd);
@@ -4968,6 +5945,9 @@ public class UssdRestController {
                 map.put("command", "1");
                 return map;
             }
+             
+            
+            //*/*/*---
             //retour au menu PerfectPay Client
             if (pojoUssd.getMessage().equals("0") && sessionussd.getLastsep().equals("237*100*7") && sessionussd.getType().equals("2")) {
                 sessionussd.setLastsep("237*100");
